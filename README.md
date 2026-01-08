@@ -8,15 +8,6 @@ This contains everything you need to run your app locally.
 
 View your app in AI Studio: https://ai.studio/apps/drive/1mOiFxoJfM9Wmtfcax-Icph38y4mx3SyO
 
-# Run and deploy your Netlify free host site
-
-Deploy your code to netlify site
-
-# Step-1
-1. Download the repo
-2. Upload your code to your git
-
-
 ## Run Locally
 
 **Prerequisites:**  Node.js
