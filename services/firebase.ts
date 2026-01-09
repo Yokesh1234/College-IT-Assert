@@ -5,14 +5,6 @@ import { getDatabase } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-
 
 // Replace these with your actual Firebase project configuration
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-  databaseURL: "https://YOUR_PROJECT_ID-default-rtdb.firebaseio.com",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_PROJECT_ID.appspot.com",
-  messagingSenderId: "YOUR_SENDER_ID",
-  appId: "YOUR_APP_ID"
-};const firebaseConfig = {
   apiKey: "AIzaSyD5u_H4wz2HoJt6NbL0jbVC1y0iZtJROqQ",
   authDomain: "college-it-assert.firebaseapp.com",
   databaseURL: "https://college-it-assert-default-rtdb.firebaseio.com",
