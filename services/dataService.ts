@@ -62,23 +62,35 @@ const generateInitialData = (rows: number, cols: number): System[] => {
 };
 
 export const dataService = {
-  subscribeSystems: (callback: (systems: System[]) => void) => {
+  subscribeSystems: (callback: (systems: System[]) => void, onError: (err: any) => void) => {
     const systemsRef = ref(db, DB_PATHS.SYSTEMS);
     return onValue(systemsRef, (snapshot) => {
       const data = snapshot.val();
       if (data) {
         const systemsArray = Object.values(data) as System[];
-        callback(systemsArray.map(s => ({ ...s, bookings: s.bookings ? Object.values(s.bookings) : [] })));
+        callback(systemsArray.map(s => ({ 
+          ...s, 
+          bookings: s.bookings ? Object.values(s.bookings) : [] 
+        })));
       } else {
         const initial = generateInitialData(9, 18);
         const updates: any = {};
         initial.forEach(s => updates[s.id] = s);
-        set(systemsRef, updates);
+        set(systemsRef, updates).catch(err => {
+          console.warn("Could not initialize systems due to permissions. Using local mock data.");
+          onError(err);
+        });
+        callback(initial);
       }
+    }, (error) => {
+      console.error("Firebase Systems Subscription Error:", error);
+      onError(error);
+      // Fallback to local generation so the UI doesn't crash
+      callback(generateInitialData(9, 18));
     });
   },
 
-  subscribeGridConfig: (callback: (config: GridConfig) => void) => {
+  subscribeGridConfig: (callback: (config: GridConfig) => void, onError: (err: any) => void) => {
     const gridRef = ref(db, DB_PATHS.GRID);
     return onValue(gridRef, (snapshot) => {
       const data = snapshot.val();
@@ -86,8 +98,17 @@ export const dataService = {
         callback(data);
       } else {
         const initial = { rows: 9, cols: 18 };
-        set(gridRef, initial);
+        set(gridRef, initial).catch(err => {
+          console.warn("Could not initialize grid due to permissions.");
+          onError(err);
+        });
+        callback(initial);
       }
+    }, (error) => {
+      console.error("Firebase Grid Subscription Error:", error);
+      onError(error);
+      // Fallback to defaults
+      callback({ rows: 9, cols: 18 });
     });
   },
 
@@ -144,8 +165,6 @@ export const dataService = {
         continue;
       }
 
-      // Generate a push ID locally so we can batch them if needed, 
-      // but Firebase set handles simple push well
       const newBookingRef = push(bookingsRef);
       updates[`${DB_PATHS.SYSTEMS}/${pcId}/bookings/${newBookingRef.key}`] = booking;
     }
