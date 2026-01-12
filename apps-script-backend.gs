@@ -69,7 +69,7 @@ function getAllData() {
     } else {
       // Software check (Simplified logic for demo)
       const required = ['VS Code', 'Python', 'Chrome'];
-      const installedNames = sw.filter(s => s[3] === 'Yes').map(s => s[1]);
+      const installedNames = sw.filter(s => s[3] === 'Yes' && s[4] === 'Yes').map(s => s[1]);
       const hasAllRequired = required.every(r => installedNames.includes(r));
       if (!hasAllRequired) status = 'PARTIAL';
     }
