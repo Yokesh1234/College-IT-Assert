@@ -50,6 +50,18 @@ const generateInitialData = (rows: number, cols: number): System[] => {
       },
       software: [
         { name: 'Chrome', version: '118.0', installed: true, license: LicenseStatus.FREE }
+        { name: 'Virtual box', version: '118.0', installed: true, license: LicenseStatus.FREE }
+        { name: 'Adobe acrobat', version: '118.0', installed: true, license: LicenseStatus.FREE }
+        { name: 'Anaconda', version: '118.0', installed: true, license: LicenseStatus.FREE }
+        { name: 'Cisco packet tracer', version: '118.0', installed: true, license: LicenseStatus.FREE }
+        { name: 'MS office', version: '118.0', installed: true, license: LicenseStatus.FREE }
+        { name: 'EditPlus', version: '118.0', installed: true, license: LicenseStatus.FREE }
+        { name: 'EMU8086', version: '118.0', installed: true, license: LicenseStatus.FREE }
+        { name: 'Java (JDK)', version: '118.0', installed: true, license: LicenseStatus.FREE }
+        { name: 'Star UML', version: '118.0', installed: true, license: LicenseStatus.FREE }
+        { name: 'Lab view', version: '118.0', installed: true, license: LicenseStatus.FREE }
+        { name: 'Trobo c++', version: '118.0', installed: true, license: LicenseStatus.FREE }
+        { name: 'Xampp', version: '118.0', installed: true, license: LicenseStatus.FREE }
       ],
       status: SystemStatus.WORKING,
       remarks: '',
