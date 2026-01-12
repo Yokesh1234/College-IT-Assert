@@ -17,7 +17,8 @@ export const calculateSystemHealth = (sys: System): System => {
       hw.keyboard === ComponentStatus.FAULTY || 
       hw.keyboard === ComponentStatus.MISSING ||
       hw.monitor === ComponentStatus.FAULTY || 
-      hw.monitor === ComponentStatus.MISSING) {
+      hw.monitor === ComponentStatus.MISSING || 
+      hw.network === ComponentStatus.NOT_CONNECTED) {
     status = SystemStatus.NOT_WORKING;
   } else {
     const missingRequired = REQUIRED_SOFTWARE.some(req => 
