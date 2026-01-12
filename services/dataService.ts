@@ -46,7 +46,7 @@ const generateInitialData = (rows: number, cols: number): System[] => {
         keyboard: ComponentStatus.OK,
         mouse: ComponentStatus.OK,
         monitor: ComponentStatus.OK,
-        network: ComponentStatus.CONNECTED,
+        network: ComponentStatus.NOT_CONNECTED,
       },
       software: [
         { name: 'Chrome', version: '118.0', installed: true, license: LicenseStatus.FREE },
