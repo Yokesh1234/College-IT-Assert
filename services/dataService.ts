@@ -49,8 +49,6 @@ const generateInitialData = (rows: number, cols: number): System[] => {
         network: ComponentStatus.CONNECTED,
       },
       software: [
-        { name: 'VS Code', version: '1.82', installed: true, license: LicenseStatus.FREE },
-        { name: 'Python', version: '3.11', installed: true, license: LicenseStatus.FREE },
         { name: 'Chrome', version: '118.0', installed: true, license: LicenseStatus.FREE }
       ],
       status: SystemStatus.WORKING,
