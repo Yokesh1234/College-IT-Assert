@@ -64,7 +64,7 @@ function getAllData() {
     const network = hw[4];
     const os = sys[4];
     
-    if (!os || keyboard === 'Faulty' || keyboard === 'Missing' || monitor === 'Faulty' || network === "No Network") {
+    if (!os || keyboard === 'Faulty' || keyboard === 'Missing' || monitor === 'Faulty' || network === 'No Network') {
       status = 'NOT_WORKING';
     } else {
       // Software check (Simplified logic for demo)
