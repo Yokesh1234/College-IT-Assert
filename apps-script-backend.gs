@@ -64,12 +64,12 @@ function getAllData() {
     const network = hw[4];
     const os = sys[4];
     
-    if (!os || keyboard === 'Faulty' || keyboard === 'Missing' || monitor === 'Faulty') {
+    if (!os || keyboard === 'Faulty' || keyboard === 'Missing' || monitor === 'Faulty' || network === "No Network") {
       status = 'NOT_WORKING';
     } else {
       // Software check (Simplified logic for demo)
       const required = ['VS Code', 'Python', 'Chrome'];
-      const installedNames = sw.filter(s => s[3] === 'Yes').map(s => s[4]);
+      const installedNames = sw.filter(s => s[3] === 'Yes').map(s => s[1]);
       const hasAllRequired = required.every(r => installedNames.includes(r));
       if (!hasAllRequired) status = 'PARTIAL';
     }
