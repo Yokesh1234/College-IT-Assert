@@ -7,12 +7,13 @@ import { dataService } from './services/dataService';
 import LabMap from './components/LabMap';
 import SystemModal from './components/SystemModal';
 import BulkBookingModal from './components/BulkBookingModal';
+import { LAB_ROWS, LAB_COLS } from './constants';
 
 const App: React.FC = () => {
   const [user, setUser] = useState<any>(null);
   const [authLoading, setAuthLoading] = useState(true);
   const [systems, setSystems] = useState<System[]>([]);
-  const [gridConfig, setGridConfig] = useState<GridConfig>({ rows: 9, cols: 18 });
+  const [gridConfig, setGridConfig] = useState<GridConfig>({ rows: LAB_ROWS, cols: LAB_COLS });
   const [loading, setLoading] = useState(true);
   const [syncError, setSyncError] = useState<string | null>(null);
   const [selectedSystem, setSelectedSystem] = useState<System | null>(null);
@@ -48,7 +49,6 @@ const App: React.FC = () => {
     const unsubSystems = dataService.subscribeSystems(
       (newSystems) => {
         setSystems(newSystems);
-        // Don't set loading false yet if we have an error pending from grid
         if (!isPermissionDenied) setLoading(false);
       },
       (err) => {
@@ -236,60 +236,10 @@ const App: React.FC = () => {
 
       {/* Main View */}
       <main className="flex-1 container mx-auto px-6 py-10 relative">
-        {isPermissionDenied && (
-          <div className="mb-8 p-8 bg-amber-500/5 border border-amber-500/20 rounded-[2rem] animate-in slide-in-from-top-4">
-             <div className="flex items-start gap-6">
-                <div className="w-12 h-12 bg-amber-500/20 rounded-2xl flex items-center justify-center text-amber-500 shrink-0">
-                  <i className="fa-solid fa-lock text-xl"></i>
-                </div>
-                <div className="flex-1">
-                   <h3 className="text-lg font-black text-amber-500 tracking-tight">Database Security Rules Required</h3>
-                   <p className="text-slate-400 text-xs mt-2 leading-relaxed">
-                     Your Firebase Realtime Database is currently locked. To enable persistence, go to your <b>Firebase Console > Realtime Database > Rules</b> and paste the following snippet:
-                   </p>
-                   <div className="mt-6 bg-slate-950 p-6 rounded-2xl border border-slate-800 font-mono text-[11px] text-blue-400 relative overflow-hidden group">
-                     <pre className="custom-scrollbar overflow-x-auto">
-{`{
-  "rules": {
-    ".read": "auth != null",
-    ".write": "auth != null"
-  }
-}`}
-                     </pre>
-                     <button 
-                       onClick={() => {
-                         navigator.clipboard.writeText('{\n  "rules": {\n    ".read": "auth != null",\n    ".write": "auth != null"\n  }\n}');
-                         alert("Snippet copied to clipboard!");
-                       }}
-                       className="absolute top-4 right-4 px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 text-[10px] font-bold rounded-lg transition-all opacity-0 group-hover:opacity-100"
-                     >
-                       COPY SNIPPET
-                     </button>
-                   </div>
-                   <p className="text-slate-500 text-[10px] mt-4 italic">Note: The application is currently using <b>MOCK DATA</b> until permissions are granted.</p>
-                </div>
-             </div>
-          </div>
-        )}
-
         {loading && !isPermissionDenied ? (
           <div className="h-full flex flex-col items-center justify-center py-40">
             <div className="w-12 h-12 border-4 border-blue-600/20 border-t-blue-600 rounded-full animate-spin"></div>
             <p className="mt-4 text-slate-500 text-xs font-black uppercase tracking-widest animate-pulse">Synchronizing Cloud Data...</p>
-          </div>
-        ) : syncError && !isPermissionDenied ? (
-          <div className="h-full flex flex-col items-center justify-center py-40 text-center">
-            <div className="w-20 h-20 bg-rose-500/10 rounded-3xl flex items-center justify-center text-rose-500 mb-6 border border-rose-500/20">
-              <i className="fa-solid fa-cloud-bolt text-4xl"></i>
-            </div>
-            <h2 className="text-2xl font-black text-white tracking-tight">Cloud Sync Fault</h2>
-            <p className="mt-3 text-slate-500 text-sm max-w-md mx-auto">{syncError}</p>
-            <button 
-               onClick={() => window.location.reload()}
-               className="mt-8 px-8 py-3 bg-slate-800 hover:bg-slate-700 text-white text-[10px] font-black uppercase tracking-widest rounded-xl border border-slate-700 transition-all"
-            >
-              Re-Establish Connection
-            </button>
           </div>
         ) : (
           <div className="grid grid-cols-1 xl:grid-cols-12 gap-12">
@@ -311,6 +261,10 @@ const App: React.FC = () => {
                       <span className="text-emerald-600/70 text-[8px] font-black uppercase tracking-widest">Operational</span>
                       <span className="text-emerald-500 text-xl font-black">{systems.filter(s => s.status === 'WORKING').length}</span>
                     </div>
+                    <div className="flex justify-between items-center bg-amber-500/5 p-4 rounded-2xl border border-amber-500/10">
+                      <span className="text-amber-600/70 text-[8px] font-black uppercase tracking-widest">Network/Soft Issues</span>
+                      <span className="text-amber-500 text-xl font-black">{systems.filter(s => s.status === 'PARTIAL').length}</span>
+                    </div>
                     <div className="flex justify-between items-center bg-rose-500/5 p-4 rounded-2xl border border-rose-500/10">
                       <span className="text-rose-600/70 text-[8px] font-black uppercase tracking-widest">System Faults</span>
                       <span className="text-rose-500 text-xl font-black">{systems.filter(s => s.status === 'NOT_WORKING').length}</span>
@@ -318,17 +272,6 @@ const App: React.FC = () => {
                   </div>
                 </div>
               </div>
-
-              {selectionMode && (
-                <div className="bg-blue-600/10 border border-blue-500/30 rounded-3xl p-8 animate-in slide-in-from-left-4">
-                   <h3 className="text-[10px] font-black text-blue-500 uppercase tracking-widest mb-6">Bulk Selection Instructions</h3>
-                   <ul className="space-y-4 text-[11px] text-slate-400 font-medium">
-                     <li className="flex gap-3"><i className="fa-solid fa-circle-1 text-blue-500"></i> Click workstations to add to the batch.</li>
-                     <li className="flex gap-3"><i className="fa-solid fa-circle-2 text-blue-500"></i> The floating bar at the bottom will track your progress.</li>
-                     <li className="flex gap-3"><i className="fa-solid fa-circle-3 text-blue-500"></i> Press "Commit Reservation" to book the entire selection.</li>
-                   </ul>
-                </div>
-              )}
             </div>
 
             {/* Map Area */}
@@ -341,15 +284,6 @@ const App: React.FC = () => {
                       ? 'SELECTING WORKSTATIONS FOR BATCH BOOKING. CLICK ANY HIGHLIGHTED NODE TO ADD TO RESERVATION.' 
                       : 'REAL-TIME MONITORING ACTIVE. CLICK A WORKSTATION TO VIEW INDIVIDUAL HEALTH TELEMETRY.'}
                   </p>
-                </div>
-                <div className="flex items-center gap-6 bg-slate-900/50 p-4 rounded-3xl border border-slate-800/80 shrink-0">
-                  <div className="flex items-center gap-3">
-                    <div className="relative">
-                       <span className="block w-2.5 h-2.5 bg-emerald-500 rounded-full"></span>
-                       <span className="absolute inset-0 w-2.5 h-2.5 bg-emerald-500 rounded-full animate-ping opacity-75"></span>
-                    </div>
-                    <span className="text-[10px] font-black text-emerald-500 uppercase tracking-widest">Realtime Sync</span>
-                  </div>
                 </div>
               </div>
 
@@ -454,10 +388,6 @@ const App: React.FC = () => {
           <p className="text-[10px] text-slate-600 font-bold uppercase tracking-widest">
             SysAdmin Lab Control &copy; 2024 • Secured Administrative Console
           </p>
-          <div className="flex gap-8 text-slate-700">
-             <i className="fa-brands fa-github text-xl hover:text-blue-500 transition-colors cursor-pointer"></i>
-             <i className="fa-solid fa-server text-xl hover:text-blue-500 transition-colors cursor-pointer"></i>
-          </div>
         </div>
       </footer>
     </div>
