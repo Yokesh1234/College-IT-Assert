@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { System, GridConfig } from '../types';
+import { System, GridConfig, ComponentStatus } from '../types';
 import SystemSeat from './SystemSeat';
 
 interface LabMapProps {
@@ -13,7 +13,6 @@ interface LabMapProps {
 const LabMap: React.FC<LabMapProps> = ({ systems, gridConfig, selectedPcIds, onSystemClick }) => {
   const { rows, cols } = gridConfig;
   
-  // Create a mapping for faster lookup
   const systemsMap = React.useMemo(() => {
     const map: Record<string, System> = {};
     systems.forEach(s => map[s.id] = s);
@@ -72,25 +71,24 @@ const LabMap: React.FC<LabMapProps> = ({ systems, gridConfig, selectedPcIds, onS
         {gridCells}
       </div>
 
-      <div className="mt-14 flex flex-wrap justify-center gap-x-10 gap-y-4 text-[10px] font-black text-slate-500 uppercase tracking-widest bg-slate-950/40 p-6 rounded-3xl border border-slate-800/50">
-        <div className="flex items-center gap-3">
+      <div className="mt-14 flex flex-wrap justify-center gap-x-8 gap-y-4 text-[9px] font-black text-slate-500 uppercase tracking-widest bg-slate-950/40 p-6 rounded-3xl border border-slate-800/50">
+        <div className="flex items-center gap-2">
           <div className="w-3 h-3 bg-emerald-500 rounded-sm"></div>
           <span>Healthy</span>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2">
           <div className="w-3 h-3 bg-amber-500 rounded-sm"></div>
-          <span>Maintenance</span>
+          <span>Software Missing</span>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2">
+          <div className="w-3 h-3 bg-blue-600 rounded-sm"></div>
+          <span>Network Error</span>
+        </div>
+        <div className="flex items-center gap-2">
           <div className="w-3 h-3 bg-rose-500 rounded-sm"></div>
           <span>Offline</span>
         </div>
-        <div className="flex items-center gap-3">
-          <div className="w-3 h-3 bg-blue-600 rounded-sm ring-2 ring-blue-500/50"></div>
-          <span>Booked</span>
-        </div>
-        <div className="h-4 w-px bg-slate-800"></div>
-        <div className="flex items-center gap-3 text-blue-400">
+        <div className="flex items-center gap-2 text-blue-400 ml-4">
            <i className="fa-solid fa-circle-check"></i>
            <span>Selected</span>
         </div>

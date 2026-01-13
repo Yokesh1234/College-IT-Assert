@@ -104,8 +104,18 @@ const SystemModal: React.FC<SystemModalProps> = ({ system, onClose, onBook, onUp
     setMsg(null);
   };
 
-  const getStatusBadge = (status: any) => {
+  const getStatusBadge = (status: any, key?: string) => {
     const isOk = status === ComponentStatus.OK || status === ComponentStatus.CONNECTED || status === true;
+    
+    // Special Blue handling for Network issue
+    if (key === 'network' && status === ComponentStatus.NOT_CONNECTED) {
+      return (
+        <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-500/10 text-blue-400 border border-blue-500/20">
+          Not Connected
+        </span>
+      );
+    }
+
     const isFaulty = status === ComponentStatus.FAULTY || status === ComponentStatus.NOT_CONNECTED || status === ComponentStatus.MISSING;
     
     return (
@@ -115,11 +125,19 @@ const SystemModal: React.FC<SystemModalProps> = ({ system, onClose, onBook, onUp
     );
   };
 
-  const getStatusIndicator = (status: SystemStatus) => {
+  const getStatusIndicator = (status: SystemStatus, sysData: System) => {
+    const isNetworkDown = sysData.hardware.network === ComponentStatus.NOT_CONNECTED;
+
     switch(status) {
-      case SystemStatus.WORKING: return <span className="text-emerald-500 bg-emerald-500/10 px-2 py-1 rounded text-[10px] font-black border border-emerald-500/20 uppercase tracking-tighter">Healthy / Working</span>;
-      case SystemStatus.PARTIAL: return <span className="text-amber-500 bg-amber-500/10 px-2 py-1 rounded text-[10px] font-black border border-amber-500/20 uppercase tracking-tighter">Partial / Missing Software</span>;
-      case SystemStatus.NOT_WORKING: return <span className="text-rose-500 bg-rose-500/10 px-2 py-1 rounded text-[10px] font-black border border-rose-500/20 uppercase tracking-tighter">Critical / Maintenance Needed</span>;
+      case SystemStatus.WORKING: 
+        return <span className="text-emerald-500 bg-emerald-500/10 px-2 py-1 rounded text-[10px] font-black border border-emerald-500/20 uppercase tracking-tighter">Healthy / Working</span>;
+      case SystemStatus.PARTIAL: 
+        if (isNetworkDown) {
+          return <span className="text-blue-500 bg-blue-500/10 px-2 py-1 rounded text-[10px] font-black border border-blue-500/20 uppercase tracking-tighter">Partial / Network Link Down</span>;
+        }
+        return <span className="text-amber-500 bg-amber-500/10 px-2 py-1 rounded text-[10px] font-black border border-amber-500/20 uppercase tracking-tighter">Partial / Missing Software</span>;
+      case SystemStatus.NOT_WORKING: 
+        return <span className="text-rose-500 bg-rose-500/10 px-2 py-1 rounded text-[10px] font-black border border-rose-500/20 uppercase tracking-tighter">Critical / Maintenance Needed</span>;
     }
   };
 
@@ -132,7 +150,7 @@ const SystemModal: React.FC<SystemModalProps> = ({ system, onClose, onBook, onUp
           <div className="flex items-center gap-6">
             <div>
               <h2 className="text-2xl font-black text-white tracking-tight">{system.id}</h2>
-              <div className="mt-1">{getStatusIndicator(system.status)}</div>
+              <div className="mt-1">{getStatusIndicator(system.status, system)}</div>
             </div>
             <div className="flex bg-slate-800/50 p-1 rounded-xl border border-slate-700">
               {['info', 'book', 'edit'].map((tab) => (
@@ -183,7 +201,7 @@ const SystemModal: React.FC<SystemModalProps> = ({ system, onClose, onBook, onUp
                         {['keyboard', 'mouse', 'monitor', 'network'].map(k => (
                           <div key={k} className="flex justify-between items-center">
                             <span className="text-[10px] text-slate-500 uppercase font-bold">{k}</span>
-                            {getStatusBadge((system.hardware as any)[k])}
+                            {getStatusBadge((system.hardware as any)[k], k)}
                           </div>
                         ))}
                       </div>
@@ -219,7 +237,7 @@ const SystemModal: React.FC<SystemModalProps> = ({ system, onClose, onBook, onUp
                     <div className="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></div>
                     <span className="text-[10px] font-black text-blue-400 uppercase tracking-widest">Projected Health Status</span>
                   </div>
-                  <div>{getStatusIndicator(projectedSystem.status)}</div>
+                  <div>{getStatusIndicator(projectedSystem.status, editData)}</div>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
