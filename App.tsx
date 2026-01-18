@@ -7,13 +7,15 @@ import { dataService } from './services/dataService';
 import LabMap from './components/LabMap';
 import SystemModal from './components/SystemModal';
 import BulkBookingModal from './components/BulkBookingModal';
-import { LAB_ROWS, LAB_COLS } from './constants';
+// Fixed imports from ./constants to use LAB_MAP_ROWS and LAB_MAP_COLS instead of non-existent LAB_ROWS and LAB_COLS
+import { LAB_MAP_ROWS, LAB_MAP_COLS } from './constants';
 
 const App: React.FC = () => {
   const [user, setUser] = useState<any>(null);
   const [authLoading, setAuthLoading] = useState(true);
   const [systems, setSystems] = useState<System[]>([]);
-  const [gridConfig, setGridConfig] = useState<GridConfig>({ rows: LAB_ROWS, cols: LAB_COLS });
+  // Fixed gridConfig initialization to use the correct constant names LAB_MAP_ROWS and LAB_MAP_COLS
+  const [gridConfig, setGridConfig] = useState<GridConfig>({ rows: LAB_MAP_ROWS, cols: LAB_MAP_COLS });
   const [loading, setLoading] = useState(true);
   const [syncError, setSyncError] = useState<string | null>(null);
   const [selectedSystem, setSelectedSystem] = useState<System | null>(null);
@@ -289,6 +291,7 @@ const App: React.FC = () => {
 
               <div className="overflow-x-auto pb-20 custom-scrollbar">
                 <div className="min-w-max">
+                  {/* Fixed LabMap component call to include gridConfig and use correct prop types */}
                   <LabMap 
                     systems={systems} 
                     gridConfig={gridConfig}

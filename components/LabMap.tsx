@@ -1,96 +1,101 @@
 
 import React from 'react';
-import { System, GridConfig, ComponentStatus } from '../types';
+import { System, GridConfig } from '../types';
+import { SYSTEMS_PER_LAB } from '../constants';
 import SystemSeat from './SystemSeat';
 
 interface LabMapProps {
   systems: System[];
-  gridConfig: GridConfig;
   selectedPcIds: string[];
   onSystemClick: (system: System) => void;
+  // Added gridConfig to props to fix the error in App.tsx where it was being passed but not defined in props
+  gridConfig: GridConfig;
 }
 
-const LabMap: React.FC<LabMapProps> = ({ systems, gridConfig, selectedPcIds, onSystemClick }) => {
-  const { rows, cols } = gridConfig;
-  
+const LabMap: React.FC<LabMapProps> = ({ systems, selectedPcIds, onSystemClick, gridConfig }) => {
   const systemsMap = React.useMemo(() => {
     const map: Record<string, System> = {};
     systems.forEach(s => map[s.id] = s);
     return map;
   }, [systems]);
 
-  const gridCells = Array.from({ length: rows * cols }, (_, i) => {
-    const currentRow = Math.floor(i / cols);
-    const currentCol = i % cols;
+  const renderTable = (labIndex: number) => {
+    const tableSystems = [];
+    const startIndex = labIndex * SYSTEMS_PER_LAB;
     
-    // Aisle logic: add horizontal space every 4 rows
-    const isAisle = currentRow > 0 && currentRow % 5 === 4;
-    
-    // Calculate system index based on rows, skipping aisle slots
-    const systemsBefore = Math.floor(currentRow / 5);
-    const systemIndex = (currentRow - systemsBefore) * cols + currentCol;
-    
-    const pcId = `PC-${(systemIndex + 1).toString().padStart(3, '0')}`;
-    const system = isAisle ? null : systemsMap[pcId];
+    for (let i = 0; i < SYSTEMS_PER_LAB; i++) {
+      const pcId = `PC-${(startIndex + i + 1).toString().padStart(3, '0')}`;
+      const system = systemsMap[pcId];
+      if (system) {
+        tableSystems.push(
+          <div key={pcId} className="w-8 h-8 sm:w-10 sm:h-10">
+            <SystemSeat 
+              system={system}
+              isSelected={selectedPcIds.includes(system.id)}
+              onClick={onSystemClick}
+            />
+          </div>
+        );
+      }
+    }
+
+    if (tableSystems.length === 0) return null;
 
     return (
-      <div key={i} className="w-10 h-10 md:w-14 md:h-14 p-0.5 flex items-center justify-center">
-        {isAisle ? (
-          <div className="w-full h-full flex items-center justify-center opacity-10">
-            <div className="w-full h-0.5 bg-slate-500 rounded-full"></div>
-          </div>
-        ) : system ? (
-          <SystemSeat 
-            system={system} 
-            isSelected={selectedPcIds.includes(system.id)}
-            onClick={onSystemClick} 
-          />
-        ) : (
-          <div className="w-full h-full rounded border border-dashed border-slate-800 bg-slate-900/50 flex items-center justify-center">
-            <span className="text-[7px] text-slate-700 font-bold uppercase">Void</span>
-          </div>
-        )}
+      <div key={labIndex} className="bg-slate-800/20 border border-slate-700/30 p-2 rounded-xl flex flex-col items-center hover:bg-slate-800/40 transition-all group">
+        <div className="flex flex-row gap-1">
+          {tableSystems}
+        </div>
+        <div className="mt-1 opacity-0 group-hover:opacity-100 transition-opacity">
+           <span className="text-[7px] font-black text-slate-500 uppercase tracking-widest">Lab {(labIndex + 1).toString().padStart(2, '0')}</span>
+        </div>
       </div>
     );
-  });
+  };
 
   return (
-    <div className="bg-slate-900/40 p-6 md:p-12 rounded-[2.5rem] border border-slate-800 shadow-2xl backdrop-blur-md">
-      <div className="mb-14 flex flex-col items-center">
-        <div className="w-full max-w-4xl h-2 bg-gradient-to-r from-transparent via-blue-500/40 to-transparent rounded-full blur-[2px]"></div>
-        <div className="text-slate-500 text-[10px] font-black tracking-[0.8em] uppercase mt-4">Administrative Front-End / Central Console</div>
+    <div className="bg-slate-900/40 p-8 md:p-12 rounded-[3rem] border border-slate-800 shadow-2xl backdrop-blur-md">
+      <div className="mb-10 flex flex-col items-center">
+        <div className="w-full max-w-5xl h-1.5 bg-gradient-to-r from-transparent via-blue-500/30 to-transparent rounded-full mb-4"></div>
+        <h2 className="text-slate-500 text-[10px] font-black tracking-[1em] uppercase">Core Facility / Node Topology</h2>
       </div>
 
       <div 
-        className="grid gap-1 md:gap-2.5 mx-auto"
-        style={{ 
-          gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))`,
-          width: 'fit-content'
-        }}
+        className="grid gap-x-12 gap-y-6" 
+        style={{ gridTemplateColumns: `repeat(${gridConfig.cols}, minmax(0, 1fr))` }}
       >
-        {gridCells}
+        {/* We render columns and rows dynamically based on gridConfig props */}
+        {[...Array(gridConfig.cols)].map((_, colIndex) => (
+          <div key={colIndex} className="flex flex-col gap-4">
+            {[...Array(gridConfig.rows)].map((_, rowIndex) => {
+              const labIndex = colIndex * gridConfig.rows + rowIndex;
+              return renderTable(labIndex);
+            })}
+          </div>
+        ))}
       </div>
 
-      <div className="mt-14 flex flex-wrap justify-center gap-x-8 gap-y-4 text-[9px] font-black text-slate-500 uppercase tracking-widest bg-slate-950/40 p-6 rounded-3xl border border-slate-800/50">
+      {/* Legend */}
+      <div className="mt-12 pt-8 border-t border-slate-800 flex flex-wrap justify-center gap-6">
         <div className="flex items-center gap-2">
           <div className="w-3 h-3 bg-emerald-500 rounded-sm"></div>
-          <span>Healthy</span>
+          <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Healthy</span>
         </div>
         <div className="flex items-center gap-2">
           <div className="w-3 h-3 bg-amber-500 rounded-sm"></div>
-          <span>Software Missing</span>
+          <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Software Issue</span>
         </div>
         <div className="flex items-center gap-2">
           <div className="w-3 h-3 bg-blue-600 rounded-sm"></div>
-          <span>Network Error</span>
+          <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Network Error</span>
         </div>
         <div className="flex items-center gap-2">
           <div className="w-3 h-3 bg-rose-500 rounded-sm"></div>
-          <span>Offline</span>
+          <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Offline</span>
         </div>
-        <div className="flex items-center gap-2 text-blue-400 ml-4">
-           <i className="fa-solid fa-circle-check"></i>
-           <span>Selected</span>
+        <div className="flex items-center gap-2">
+          <i className="fa-solid fa-circle-check text-blue-400 text-[10px]"></i>
+          <span className="text-[9px] font-black text-blue-400 uppercase tracking-widest">Selected</span>
         </div>
       </div>
     </div>

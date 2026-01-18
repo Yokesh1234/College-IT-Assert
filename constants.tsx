@@ -1,8 +1,10 @@
 
 import React from 'react';
 
-export const LAB_ROWS = 9;
-export const LAB_COLS = 12;
+export const TOTAL_LABS = 27;
+export const SYSTEMS_PER_LAB = 6;
+export const LAB_MAP_ROWS = 9;
+export const LAB_MAP_COLS = 3;
 
 export const SLOTS = [
   '09:00 AM - 11:00 AM',
@@ -12,5 +14,7 @@ export const SLOTS = [
 ];
 
 export const REQUIRED_SOFTWARE = [
-  'VS Code'
+  'VS Code',
+  'Python',
+  'Chrome'
 ];
