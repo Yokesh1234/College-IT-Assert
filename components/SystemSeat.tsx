@@ -22,13 +22,13 @@ const SystemSeat: React.FC<SystemSeatProps> = ({ system, isSelected, onClick }) 
   };
 
   const getStatusIcon = () => {
-    if (isSelected) return <i className="fa-solid fa-circle-check text-[10px] text-white"></i>;
-    if (isNetworkDown) return <i className="fa-solid fa-wifi text-[8px] text-white/70"></i>;
+    if (isSelected) return <i className="fa-solid fa-circle-check text-[10px] sm:text-[12px] text-white"></i>;
+    if (isNetworkDown) return <i className="fa-solid fa-wifi text-[8px] sm:text-[10px] text-white/70"></i>;
     
     switch (system.status) {
       case SystemStatus.WORKING: return null;
-      case SystemStatus.PARTIAL: return <i className="fa-solid fa-triangle-exclamation text-[8px] text-white/70"></i>;
-      case SystemStatus.NOT_WORKING: return <i className="fa-solid fa-xmark text-[8px] text-white/70"></i>;
+      case SystemStatus.PARTIAL: return <i className="fa-solid fa-triangle-exclamation text-[8px] sm:text-[10px] text-white/70"></i>;
+      case SystemStatus.NOT_WORKING: return <i className="fa-solid fa-xmark text-[8px] sm:text-[10px] text-white/70"></i>;
       default: return null;
     }
   };
@@ -37,15 +37,15 @@ const SystemSeat: React.FC<SystemSeatProps> = ({ system, isSelected, onClick }) 
     <div 
       onClick={() => onClick(system)}
       className={`
-        relative w-full h-full rounded-sm cursor-pointer transition-all duration-200 
-        flex items-center justify-center border group
+        relative w-full h-full rounded-md cursor-pointer transition-all duration-200 
+        flex items-center justify-center border group active:scale-90
         ${isSelected ? 'border-white ring-2 ring-blue-500/50 scale-110 z-10' : 'border-white/5'}
         ${getStatusColor()}
         shadow-md
       `}
     >
       <div className="flex flex-col items-center">
-        <span className={`text-[7px] font-black uppercase tracking-tighter transition-opacity ${isSelected ? 'hidden' : 'opacity-80'}`}>
+        <span className={`text-[8px] sm:text-[9px] font-black uppercase tracking-tighter transition-opacity ${isSelected ? 'hidden' : 'opacity-80'}`}>
           {system.id.split('-')[1]}
         </span>
         {getStatusIcon()}
@@ -53,28 +53,21 @@ const SystemSeat: React.FC<SystemSeatProps> = ({ system, isSelected, onClick }) 
 
       {/* Booking Dot */}
       {system.bookings.length > 0 && !isSelected && (
-        <div className="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 bg-white rounded-full"></div>
+        <div className="absolute -top-1 -right-1 w-2 h-2 bg-white rounded-full border-2 border-slate-900"></div>
       )}
 
-      {/* Compact Tooltip */}
-      {!isSelected && (
-        <div className="absolute bottom-full mb-2 hidden group-hover:block z-50 bg-slate-900 text-white text-[9px] p-2 rounded shadow-2xl border border-slate-700 animate-in fade-in slide-in-from-bottom-1 pointer-events-none whitespace-nowrap">
-          <div className="font-black border-b border-slate-700 mb-1 pb-1">{system.id}</div>
-          <div className="flex gap-2">
-            <span className="text-slate-500 uppercase font-black">Net:</span>
-            <span className={isNetworkDown ? 'text-rose-400' : 'text-emerald-400'}>{system.hardware.network}</span>
-          </div>
-          <div className="flex gap-2">
-            <span className="text-slate-500 uppercase font-black">Status:</span>
-            <span>{system.status.replace('_', ' ')}</span>
-          </div>
-          {system.bookings.length > 0 && (
-            <div className="mt-1 pt-1 border-t border-slate-800 text-blue-400">
-              Active Reservations: {system.bookings.length}
-            </div>
-          )}
+      {/* Desktop-only Compact Tooltip */}
+      <div className="absolute bottom-full mb-2 hidden lg:group-hover:block z-50 bg-slate-950 text-white text-[9px] p-2 rounded-lg shadow-2xl border border-slate-800 pointer-events-none whitespace-nowrap">
+        <div className="font-black border-b border-slate-800 mb-1 pb-1">{system.id}</div>
+        <div className="flex gap-2">
+          <span className="text-slate-500 uppercase font-black">Net:</span>
+          <span className={isNetworkDown ? 'text-rose-400' : 'text-emerald-400'}>{system.hardware.network}</span>
         </div>
-      )}
+        <div className="flex gap-2">
+          <span className="text-slate-500 uppercase font-black">Status:</span>
+          <span>{system.status.replace('_', ' ')}</span>
+        </div>
+      </div>
     </div>
   );
 };

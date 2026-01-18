@@ -8,7 +8,6 @@ interface LabMapProps {
   systems: System[];
   selectedPcIds: string[];
   onSystemClick: (system: System) => void;
-  // Added gridConfig to props to fix the error in App.tsx where it was being passed but not defined in props
   gridConfig: GridConfig;
 }
 
@@ -28,7 +27,7 @@ const LabMap: React.FC<LabMapProps> = ({ systems, selectedPcIds, onSystemClick, 
       const system = systemsMap[pcId];
       if (system) {
         tableSystems.push(
-          <div key={pcId} className="w-8 h-8 sm:w-10 sm:h-10">
+          <div key={pcId} className="w-8 h-8 sm:w-10 sm:h-10 lg:w-11 lg:h-11">
             <SystemSeat 
               system={system}
               isSelected={selectedPcIds.includes(system.id)}
@@ -42,60 +41,53 @@ const LabMap: React.FC<LabMapProps> = ({ systems, selectedPcIds, onSystemClick, 
     if (tableSystems.length === 0) return null;
 
     return (
-      <div key={labIndex} className="bg-slate-800/20 border border-slate-700/30 p-2 rounded-xl flex flex-col items-center hover:bg-slate-800/40 transition-all group">
-        <div className="flex flex-row gap-1">
+      <div key={labIndex} className="bg-slate-800/10 border border-slate-800/40 p-2 sm:p-3 rounded-xl flex flex-col items-center hover:bg-slate-800/30 transition-all group shadow-sm">
+        <div className="flex flex-row gap-1 sm:gap-1.5">
           {tableSystems}
         </div>
-        <div className="mt-1 opacity-0 group-hover:opacity-100 transition-opacity">
-           <span className="text-[7px] font-black text-slate-500 uppercase tracking-widest">Lab {(labIndex + 1).toString().padStart(2, '0')}</span>
+        <div className="mt-1 opacity-60 group-hover:opacity-100 transition-opacity">
+           <span className="text-[7px] sm:text-[8px] font-black text-slate-500 uppercase tracking-widest">Table {(labIndex + 1).toString().padStart(2, '0')}</span>
         </div>
       </div>
     );
   };
 
+  // We flatten the grid logic for responsiveness. 
+  // Instead of fixed columns, we use a responsive grid that adapts to width.
+  const totalTables = gridConfig.rows * gridConfig.cols;
+
   return (
-    <div className="bg-slate-900/40 p-8 md:p-12 rounded-[3rem] border border-slate-800 shadow-2xl backdrop-blur-md">
-      <div className="mb-10 flex flex-col items-center">
-        <div className="w-full max-w-5xl h-1.5 bg-gradient-to-r from-transparent via-blue-500/30 to-transparent rounded-full mb-4"></div>
-        <h2 className="text-slate-500 text-[10px] font-black tracking-[1em] uppercase">Core Facility / Node Topology</h2>
+    <div className="bg-slate-900/40 p-4 sm:p-8 md:p-12 rounded-2xl sm:rounded-[3rem] border border-slate-800 shadow-2xl backdrop-blur-md transition-layout">
+      <div className="mb-6 sm:mb-10 flex flex-col items-center">
+        <div className="w-full max-w-5xl h-1 bg-gradient-to-r from-transparent via-blue-500/20 to-transparent rounded-full mb-4"></div>
+        <h2 className="text-slate-500 text-[9px] sm:text-[10px] font-black tracking-[0.5em] sm:tracking-[1em] uppercase text-center">Core Facility / Node Topology</h2>
       </div>
 
-      <div 
-        className="grid gap-x-12 gap-y-6" 
-        style={{ gridTemplateColumns: `repeat(${gridConfig.cols}, minmax(0, 1fr))` }}
-      >
-        {/* We render columns and rows dynamically based on gridConfig props */}
-        {[...Array(gridConfig.cols)].map((_, colIndex) => (
-          <div key={colIndex} className="flex flex-col gap-4">
-            {[...Array(gridConfig.rows)].map((_, rowIndex) => {
-              const labIndex = colIndex * gridConfig.rows + rowIndex;
-              return renderTable(labIndex);
-            })}
-          </div>
-        ))}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
+        {[...Array(totalTables)].map((_, i) => renderTable(i))}
       </div>
 
       {/* Legend */}
-      <div className="mt-12 pt-8 border-t border-slate-800 flex flex-wrap justify-center gap-6">
-        <div className="flex items-center gap-2">
-          <div className="w-3 h-3 bg-emerald-500 rounded-sm"></div>
-          <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Healthy</span>
+      <div className="mt-8 sm:mt-12 pt-6 sm:pt-8 border-t border-slate-800 flex flex-wrap justify-center gap-3 sm:gap-6">
+        <div className="flex items-center gap-2 px-2 py-1 bg-slate-800/30 rounded-lg">
+          <div className="w-2.5 h-2.5 bg-emerald-500 rounded-sm"></div>
+          <span className="text-[8px] sm:text-[9px] font-black text-slate-500 uppercase tracking-widest">Healthy</span>
         </div>
-        <div className="flex items-center gap-2">
-          <div className="w-3 h-3 bg-amber-500 rounded-sm"></div>
-          <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Software Issue</span>
+        <div className="flex items-center gap-2 px-2 py-1 bg-slate-800/30 rounded-lg">
+          <div className="w-2.5 h-2.5 bg-amber-500 rounded-sm"></div>
+          <span className="text-[8px] sm:text-[9px] font-black text-slate-500 uppercase tracking-widest">Issue</span>
         </div>
-        <div className="flex items-center gap-2">
-          <div className="w-3 h-3 bg-blue-600 rounded-sm"></div>
-          <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Network Error</span>
+        <div className="flex items-center gap-2 px-2 py-1 bg-slate-800/30 rounded-lg">
+          <div className="w-2.5 h-2.5 bg-blue-600 rounded-sm"></div>
+          <span className="text-[8px] sm:text-[9px] font-black text-slate-500 uppercase tracking-widest">Net Error</span>
         </div>
-        <div className="flex items-center gap-2">
-          <div className="w-3 h-3 bg-rose-500 rounded-sm"></div>
-          <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Offline</span>
+        <div className="flex items-center gap-2 px-2 py-1 bg-slate-800/30 rounded-lg">
+          <div className="w-2.5 h-2.5 bg-rose-500 rounded-sm"></div>
+          <span className="text-[8px] sm:text-[9px] font-black text-slate-500 uppercase tracking-widest">Offline</span>
         </div>
-        <div className="flex items-center gap-2">
-          <i className="fa-solid fa-circle-check text-blue-400 text-[10px]"></i>
-          <span className="text-[9px] font-black text-blue-400 uppercase tracking-widest">Selected</span>
+        <div className="flex items-center gap-2 px-2 py-1 bg-slate-800/30 rounded-lg">
+          <i className="fa-solid fa-circle-check text-blue-400 text-[9px]"></i>
+          <span className="text-[8px] sm:text-[9px] font-black text-blue-400 uppercase tracking-widest">Selected</span>
         </div>
       </div>
     </div>
