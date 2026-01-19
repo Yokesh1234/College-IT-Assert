@@ -23,7 +23,7 @@ const LabMap: React.FC<LabMapProps> = ({ systems, selectedPcIds, onSystemClick, 
     const startIndex = labIndex * SYSTEMS_PER_LAB;
     
     for (let i = 0; i < SYSTEMS_PER_LAB; i++) {
-      const pcId = `CSE-GF-${(startIndex + i + 1).toString().padStart(3, '0')}`;
+      const pcId = `PC-${(startIndex + i + 1).toString().padStart(3, '0')}`;
       const system = systemsMap[pcId];
       if (system) {
         tableSystems.push(
