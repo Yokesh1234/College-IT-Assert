@@ -14,7 +14,5 @@ export const SLOTS = [
 ];
 
 export const REQUIRED_SOFTWARE = [
-  'VS Code',
-  'Python',
   'Chrome'
 ];
