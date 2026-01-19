@@ -389,7 +389,7 @@ const App: React.FC = () => {
       <footer className="bg-slate-950 border-t border-slate-800/50 py-6 sm:py-10 px-4 sm:px-8">
         <div className="container mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-[8px] sm:text-[10px] text-slate-600 font-bold uppercase tracking-widest text-center sm:text-left">
-            SysAdmin Lab Control &copy; 2024 • Secured Administrative Console BY Yokesh
+            SysAdmin Lab Control &copy; 2024 • Secured Administrative Console
           </p>
           <div className="flex gap-4">
             <i className="fa-brands fa-github text-slate-700 hover:text-slate-500 transition-colors"></i>
