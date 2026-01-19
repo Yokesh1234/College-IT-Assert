@@ -40,10 +40,10 @@ const generateInitialData = (): System[] => {
       id: pcId,
       hardware: {
         pcId,
-        cpu: 'Intel i7-12700',
+        cpu: 'Intel i5-12400',
         ram: '16GB DDR4',
-        storage: '512GB NVMe SSD',
-        os: 'Windows 11 Pro',
+        storage: '477GB NVMe SSD',
+        os: 'Windows 10 Pro',
         keyboard: ComponentStatus.OK,
         mouse: ComponentStatus.OK,
         monitor: ComponentStatus.OK,
