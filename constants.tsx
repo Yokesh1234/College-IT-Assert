@@ -14,5 +14,23 @@ export const SLOTS = [
 ];
 
 export const REQUIRED_SOFTWARE = [
-  'Chrome'
+  'Adobe Acrobat Reader DC',
+'Anaconda',
+'Cisco Packet Tracer',
+'EditPlus',
+'EMU8086',
+'Chrome',
+'Java8 JDK',
+'Edge',
+'MS Office',
+'Mongo DB',
+'National Instrument Software',
+'Npcap',
+'Oracle VM',
+'Python',
+'RStudio',
+'StarUML',
+'Turbo C++',
+'Wireshark',
+'Xampp'
 ];
