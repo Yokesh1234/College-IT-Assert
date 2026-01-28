@@ -46,18 +46,28 @@ export interface Booking {
   session: string;
 }
 
+export interface MaintenanceLog {
+  id: string;
+  timestamp: string;
+  note: string;
+  adminEmail: string;
+}
+
 export interface System {
   id: string;
+  name?: string; // System Alias
   hardware: HardwareInfo;
   software: SoftwareInfo[];
   status: SystemStatus;
   remarks: string;
   bookings: Booking[];
+  logs?: MaintenanceLog[]; // Maintenance History
 }
 
 export interface GridConfig {
   rows: number;
   cols: number;
+  tableNames?: Record<string, string>; // Mapping of tableIndex to custom names
 }
 
 export interface LabLayout {

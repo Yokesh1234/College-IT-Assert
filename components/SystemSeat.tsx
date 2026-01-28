@@ -33,6 +33,12 @@ const SystemSeat: React.FC<SystemSeatProps> = ({ system, isSelected, onClick }) 
     }
   };
 
+  // Extract a short identifier for the seat label
+  // If there's an alias that differs from the ID and is reasonably short, we use it
+  const seatLabel = system.name && system.name !== system.id 
+    ? (system.name.length > 5 ? system.name.substring(0, 4) + '..' : system.name)
+    : system.id.split('-')[1];
+
   return (
     <div 
       onClick={() => onClick(system)}
@@ -46,7 +52,7 @@ const SystemSeat: React.FC<SystemSeatProps> = ({ system, isSelected, onClick }) 
     >
       <div className="flex flex-col items-center">
         <span className={`text-[8px] sm:text-[9px] font-black uppercase tracking-tighter transition-opacity ${isSelected ? 'hidden' : 'opacity-80'}`}>
-          {system.id.split('-')[1]}
+          {seatLabel}
         </span>
         {getStatusIcon()}
       </div>
@@ -58,14 +64,17 @@ const SystemSeat: React.FC<SystemSeatProps> = ({ system, isSelected, onClick }) 
 
       {/* Desktop-only Compact Tooltip */}
       <div className="absolute bottom-full mb-2 hidden lg:group-hover:block z-50 bg-slate-950 text-white text-[9px] p-2 rounded-lg shadow-2xl border border-slate-800 pointer-events-none whitespace-nowrap">
-        <div className="font-black border-b border-slate-800 mb-1 pb-1">{system.id}</div>
+        <div className="font-black border-b border-slate-800 mb-1 pb-1">
+           {system.name || system.id}
+           {system.name && <span className="ml-2 text-slate-500">[{system.id}]</span>}
+        </div>
         <div className="flex gap-2">
           <span className="text-slate-500 uppercase font-black">Net:</span>
           <span className={isNetworkDown ? 'text-rose-400' : 'text-emerald-400'}>{system.hardware.network}</span>
         </div>
         <div className="flex gap-2">
-          <span className="text-slate-500 uppercase font-black">Status:</span>
-          <span>{system.status.replace('_', ' ')}</span>
+          <span className="text-slate-500 uppercase font-black">Maintenance:</span>
+          <span className="text-blue-400">{system.logs?.length || 0} logs</span>
         </div>
       </div>
     </div>

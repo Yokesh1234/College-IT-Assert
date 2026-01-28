@@ -1,7 +1,7 @@
 
-import { ref, onValue, set, update, push, get } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js';
+import { ref, onValue, set, update, push } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js';
 import { db } from './firebase';
-import { System, SystemStatus, ComponentStatus, LicenseStatus, SoftwareInfo, Booking, GridConfig } from '../types';
+import { System, SystemStatus, ComponentStatus, LicenseStatus, Booking, GridConfig, MaintenanceLog } from '../types';
 import { REQUIRED_SOFTWARE, TOTAL_LABS, SYSTEMS_PER_LAB } from '../constants';
 
 const DB_PATHS = {
@@ -38,6 +38,7 @@ const generateInitialData = (): System[] => {
     const pcId = `PC-${i.toString().padStart(3, '0')}`;
     systems.push({
       id: pcId,
+      name: pcId, // Default alias is the ID
       hardware: {
         pcId,
         cpu: 'Intel i5-12400',
@@ -49,29 +50,16 @@ const generateInitialData = (): System[] => {
         monitor: ComponentStatus.OK,
         network: ComponentStatus.CONNECTED,
       },
-      software: [
-        { name: 'Adobe Acrobat Reader DC', version: '2.512', installed: true, license: LicenseStatus.FREE },
-        { name: 'Anaconda', version: '3.117', installed: true, license: LicenseStatus.FREE },
-        { name: 'Cisco Packet Tracer', version: '4', installed: true, license: LicenseStatus.EDU },
-        { name: 'EditPlus', version: '4', installed: true, license: LicenseStatus.FREE },
-        { name: 'EMU8086', version: '1.64', installed: true, license: LicenseStatus.FREE },
-        { name: 'Chrome', version: '144.0.7559', installed: true, license: LicenseStatus.FREE },
-        { name: 'Java8 JDK', version: '8', installed: true, license: LicenseStatus.FREE },
-        { name: 'Edge', version: '118.0', installed: true, license: LicenseStatus.FREE },
-        { name: 'MS Office', version: '2016', installed: true, license: LicenseStatus.PAID },
-        { name: 'Mongo DB', version: '8.0.9', installed: true, license: LicenseStatus.FREE },
-        { name: 'LabVIEW', version: '2010', installed: true, license: LicenseStatus.PAID },
-        { name: 'Oracle VM', version: '7.0.10', installed: true, license: LicenseStatus.FREE },
-        { name: 'Python', version: '3.13', installed: true, license: LicenseStatus.FREE },
-        { name: 'RStudio', version: '12.1+563', installed: true, license: LicenseStatus.FREE },
-        { name: 'StarUML', version: '6.1.0', installed: true, license: LicenseStatus.FREE },
-        { name: 'Turbo C++', version: '3.2.3.0', installed: true, license: LicenseStatus.FREE },
-        { name: 'Wireshark', version: '4.4.7', installed: true, license: LicenseStatus.FREE },
-        { name: 'Xampp', version: '8.2.12', installed: true, license: LicenseStatus.FREE }
-        ],
+      software: REQUIRED_SOFTWARE.map(name => ({
+        name,
+        version: 'Latest',
+        installed: true,
+        license: LicenseStatus.FREE
+      })),
       status: SystemStatus.WORKING,
       remarks: '',
-      bookings: []
+      bookings: [],
+      logs: []
     });
   }
   return systems;
@@ -81,19 +69,24 @@ export const dataService = {
   subscribeSystems: (callback: (systems: System[]) => void, onError: (err: any) => void) => {
     const systemsRef = ref(db, DB_PATHS.SYSTEMS);
     return onValue(systemsRef, (snapshot) => {
-      const data = snapshot.val();
-      if (data) {
-        const systemsArray = Object.values(data) as System[];
-        callback(systemsArray.map(s => ({ 
-          ...s, 
-          bookings: s.bookings ? Object.values(s.bookings) : [] 
-        })));
-      } else {
-        const initial = generateInitialData();
-        const updates: any = {};
-        initial.forEach(s => updates[s.id] = s);
-        set(systemsRef, updates).catch(err => onError(err));
-        callback(initial);
+      try {
+        const data = snapshot.val();
+        if (data) {
+          const systemsArray = Object.values(data) as System[];
+          callback(systemsArray.map(s => ({ 
+            ...s, 
+            bookings: s.bookings ? Object.values(s.bookings) : [],
+            logs: s.logs ? Object.values(s.logs) : []
+          })));
+        } else {
+          const initial = generateInitialData();
+          callback(initial);
+          const updates: any = {};
+          initial.forEach(s => updates[s.id] = s);
+          set(systemsRef, updates).catch(err => console.warn(err));
+        }
+      } catch (e) {
+        onError(e);
       }
     }, (error) => {
       onError(error);
@@ -106,28 +99,41 @@ export const dataService = {
     return onValue(gridRef, (snapshot) => {
       const data = snapshot.val();
       if (data) {
-        callback(data);
+        callback({
+          ...data,
+          tableNames: data.tableNames || {}
+        });
       } else {
-        const initial = { rows: 9, cols: 3 };
-        set(gridRef, initial).catch(err => onError(err));
+        const initial = { rows: 9, cols: 3, tableNames: {} };
         callback(initial);
+        set(gridRef, initial).catch(() => {});
       }
     }, (error) => {
       onError(error);
-      callback({ rows: 9, cols: 3 });
+      callback({ rows: 9, cols: 3, tableNames: {} });
     });
   },
 
   updateSystem: async (updatedSystem: System): Promise<void> => {
     const healthChecked = calculateSystemHealth(updatedSystem);
-    const { bookings, ...dataWithoutBookings } = healthChecked;
-    await update(ref(db, `${DB_PATHS.SYSTEMS}/${updatedSystem.id}`), dataWithoutBookings);
+    const { bookings, logs, ...dataToSave } = healthChecked;
+    await update(ref(db, `${DB_PATHS.SYSTEMS}/${updatedSystem.id}`), dataToSave);
   },
 
-  // Added updateGridConfig to fix the missing property error in App.tsx
+  addMaintenanceLog: async (pcId: string, log: Omit<MaintenanceLog, 'id'>): Promise<void> => {
+    const logsRef = ref(db, `${DB_PATHS.SYSTEMS}/${pcId}/logs`);
+    const newLogRef = push(logsRef);
+    await set(newLogRef, { ...log, id: newLogRef.key });
+  },
+
   updateGridConfig: async (config: GridConfig): Promise<void> => {
     const gridRef = ref(db, DB_PATHS.GRID);
     await set(gridRef, config);
+  },
+
+  updateTableName: async (tableIndex: number, newName: string): Promise<void> => {
+    const nameRef = ref(db, `${DB_PATHS.GRID}/tableNames/${tableIndex}`);
+    await set(nameRef, newName);
   },
 
   bookSystems: async (pcIds: string[], booking: Booking): Promise<{ success: boolean; message: string }> => {
