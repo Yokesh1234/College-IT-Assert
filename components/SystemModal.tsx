@@ -300,7 +300,7 @@ const SystemModal: React.FC<SystemModalProps> = ({ system, onClose, onBook, onUp
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-1">
                       <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest block">Date</label>
-                      <input type="date" required value={bookingDate} onChange={e => setBookingDate(e.target.value)} className="w-full bg-slate-800 border border-slate-700 rounded-xl p-4 text-xs text-white outline-none" />
+                      <input type="date" required value={bookingDate} onChange={setBookingDate} className="w-full bg-slate-800 border border-slate-700 rounded-xl p-4 text-xs text-white outline-none" />
                     </div>
                     <div className="space-y-1">
                       <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest block">Slot</label>
@@ -321,7 +321,6 @@ const SystemModal: React.FC<SystemModalProps> = ({ system, onClose, onBook, onUp
             )}
           </div>
 
-          {/* Messages & Sidebar */}
           <div className="w-full lg:w-80 bg-slate-800/10 p-6 sm:p-10 border-t lg:border-t-0 lg:border-l border-slate-800">
              {msg && (
                 <div className={`mb-8 p-4 rounded-xl text-[10px] font-black text-center border animate-in slide-in-from-top-2 ${msg.type === 'success' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : 'bg-rose-500/10 text-rose-400 border-rose-500/20'}`}>

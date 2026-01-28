@@ -34,7 +34,6 @@ const SystemSeat: React.FC<SystemSeatProps> = ({ system, isSelected, onClick }) 
   };
 
   // Extract a short identifier for the seat label
-  // If there's an alias that differs from the ID and is reasonably short, we use it
   const seatLabel = system.name && system.name !== system.id 
     ? (system.name.length > 5 ? system.name.substring(0, 4) + '..' : system.name)
     : system.id.split('-')[1];
