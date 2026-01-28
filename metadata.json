@@ -1,6 +1,6 @@
 {
   "name": "SysAdmin Lab Manager Pro",
-  "description": "College Lab Maintainance System control",
+  "description": "A comprehensive computer lab monitoring and booking system for college administrators, featuring real-time health tracking and a theater-style system layout.",
   "requestFramePermissions": [
     "geolocation"
   ]

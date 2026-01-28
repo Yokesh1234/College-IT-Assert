@@ -300,7 +300,8 @@ const SystemModal: React.FC<SystemModalProps> = ({ system, onClose, onBook, onUp
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-1">
                       <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest block">Date</label>
-                      <input type="date" required value={bookingDate} onChange={setBookingDate} className="w-full bg-slate-800 border border-slate-700 rounded-xl p-4 text-xs text-white outline-none" />
+                      {/* Fixed: Wrapped setBookingDate with an arrow function to correctly handle the ChangeEvent and extract e.target.value */}
+                      <input type="date" required value={bookingDate} onChange={e => setBookingDate(e.target.value)} className="w-full bg-slate-800 border border-slate-700 rounded-xl p-4 text-xs text-white outline-none" />
                     </div>
                     <div className="space-y-1">
                       <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest block">Slot</label>
