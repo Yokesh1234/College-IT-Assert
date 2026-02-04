@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { System, SystemStatus, ComponentStatus } from '../types';
 
@@ -33,7 +32,6 @@ const SystemSeat: React.FC<SystemSeatProps> = ({ system, isSelected, onClick }) 
     }
   };
 
-  // Extract a short identifier for the seat label
   const seatLabel = system.name && system.name !== system.id 
     ? (system.name.length > 5 ? system.name.substring(0, 4) + '..' : system.name)
     : system.id.split('-')[1];
@@ -56,12 +54,10 @@ const SystemSeat: React.FC<SystemSeatProps> = ({ system, isSelected, onClick }) 
         {getStatusIcon()}
       </div>
 
-      {/* Booking Dot */}
       {system.bookings.length > 0 && !isSelected && (
         <div className="absolute -top-1 -right-1 w-2 h-2 bg-white rounded-full border-2 border-slate-900"></div>
       )}
 
-      {/* Desktop-only Compact Tooltip */}
       <div className="absolute bottom-full mb-2 hidden lg:group-hover:block z-50 bg-slate-950 text-white text-[9px] p-2 rounded-lg shadow-2xl border border-slate-800 pointer-events-none whitespace-nowrap">
         <div className="font-black border-b border-slate-800 mb-1 pb-1">
            {system.name || system.id}

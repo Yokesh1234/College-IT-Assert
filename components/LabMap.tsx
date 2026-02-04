@@ -9,10 +9,19 @@ interface LabMapProps {
   systems: System[];
   selectedPcIds: string[];
   onSystemClick: (system: System) => void;
+  onTableSelect?: (pcIds: string[]) => void;
   gridConfig: GridConfig;
+  selectionMode?: boolean;
 }
 
-const LabMap: React.FC<LabMapProps> = ({ systems, selectedPcIds, onSystemClick, gridConfig }) => {
+const LabMap: React.FC<LabMapProps> = ({ 
+  systems, 
+  selectedPcIds, 
+  onSystemClick, 
+  onTableSelect,
+  gridConfig, 
+  selectionMode 
+}) => {
   const [editingTableIndex, setEditingTableIndex] = useState<number | null>(null);
   const [tempTableName, setTempTableName] = useState('');
 
@@ -23,6 +32,7 @@ const LabMap: React.FC<LabMapProps> = ({ systems, selectedPcIds, onSystemClick, 
   }, [systems]);
 
   const handleStartEditTable = (index: number, currentName: string) => {
+    if (selectionMode) return; // Disable editing table name during selection mode
     setEditingTableIndex(index);
     setTempTableName(currentName || `Table ${(index + 1).toString().padStart(2, '0')}`);
   };
@@ -36,12 +46,14 @@ const LabMap: React.FC<LabMapProps> = ({ systems, selectedPcIds, onSystemClick, 
 
   const renderTable = (labIndex: number) => {
     const tableSystems = [];
+    const tablePcIds: string[] = [];
     const startIndex = labIndex * SYSTEMS_PER_LAB;
     
     for (let i = 0; i < SYSTEMS_PER_LAB; i++) {
       const pcId = `PC-${(startIndex + i + 1).toString().padStart(3, '0')}`;
       const system = systemsMap[pcId];
       if (system) {
+        tablePcIds.push(pcId);
         tableSystems.push(
           <div key={pcId} className="w-8 h-8 sm:w-10 sm:h-10 lg:w-11 lg:h-11">
             <SystemSeat 
@@ -60,35 +72,52 @@ const LabMap: React.FC<LabMapProps> = ({ systems, selectedPcIds, onSystemClick, 
     const defaultName = `Table ${(labIndex + 1).toString().padStart(2, '0')}`;
     const displayName = customName || defaultName;
 
+    const allInTableSelected = tablePcIds.length > 0 && tablePcIds.every(id => selectedPcIds.includes(id));
+
     return (
-      <div key={labIndex} className="bg-slate-800/10 border border-slate-800/40 p-2 sm:p-3 rounded-xl flex flex-col items-center hover:bg-slate-800/30 transition-all group shadow-sm">
+      <div key={labIndex} className={`bg-slate-800/10 border p-2 sm:p-3 rounded-xl flex flex-col items-center transition-all group shadow-sm ${allInTableSelected ? 'border-blue-500/50 bg-blue-500/5' : 'border-slate-800/40 hover:bg-slate-800/30'}`}>
         <div className="flex flex-row gap-1 sm:gap-1.5 mb-2">
           {tableSystems}
         </div>
         
         <div className="w-full flex items-center justify-center gap-2">
-          {editingTableIndex === labIndex ? (
-            <div className="flex items-center gap-1">
-              <input 
-                autoFocus
-                type="text"
-                value={tempTableName}
-                onChange={e => setTempTableName(e.target.value)}
-                onBlur={() => handleSaveTableName(labIndex)}
-                onKeyDown={e => e.key === 'Enter' && handleSaveTableName(labIndex)}
-                className="bg-slate-900 text-[8px] font-black text-blue-400 uppercase border border-blue-500/50 rounded px-1 outline-none w-20"
-              />
-            </div>
-          ) : (
-            <div 
-              className="flex items-center gap-1 cursor-pointer"
-              onClick={() => handleStartEditTable(labIndex, displayName)}
+          {selectionMode ? (
+            <button 
+              onClick={(e) => {
+                e.stopPropagation();
+                onTableSelect?.(tablePcIds);
+              }}
+              className={`flex items-center gap-1.5 px-2 py-0.5 rounded border transition-all ${allInTableSelected ? 'bg-blue-600 border-blue-500 text-white' : 'bg-slate-800 border-slate-700 text-slate-500 hover:text-white hover:border-slate-600'}`}
             >
-              <span className="text-[7px] sm:text-[8px] font-black text-slate-500 uppercase tracking-widest truncate max-w-[80px]">
+              <i className={`fa-solid ${allInTableSelected ? 'fa-square-check' : 'fa-square'} text-[8px]`}></i>
+              <span className="text-[7px] sm:text-[8px] font-black uppercase tracking-widest truncate max-w-[80px]">
                 {displayName}
               </span>
-              <i className="fa-solid fa-pencil text-[6px] text-slate-600 opacity-0 group-hover:opacity-100"></i>
-            </div>
+            </button>
+          ) : (
+            editingTableIndex === labIndex ? (
+              <div className="flex items-center gap-1">
+                <input 
+                  autoFocus
+                  type="text"
+                  value={tempTableName}
+                  onChange={e => setTempTableName(e.target.value)}
+                  onBlur={() => handleSaveTableName(labIndex)}
+                  onKeyDown={e => e.key === 'Enter' && handleSaveTableName(labIndex)}
+                  className="bg-slate-900 text-[8px] font-black text-blue-400 uppercase border border-blue-500/50 rounded px-1 outline-none w-20"
+                />
+              </div>
+            ) : (
+              <div 
+                className="flex items-center gap-1 cursor-pointer"
+                onClick={() => handleStartEditTable(labIndex, displayName)}
+              >
+                <span className="text-[7px] sm:text-[8px] font-black text-slate-500 uppercase tracking-widest truncate max-w-[80px]">
+                  {displayName}
+                </span>
+                <i className="fa-solid fa-pencil text-[6px] text-slate-600 opacity-0 group-hover:opacity-100"></i>
+              </div>
+            )
           )}
         </div>
       </div>
@@ -120,6 +149,12 @@ const LabMap: React.FC<LabMapProps> = ({ systems, selectedPcIds, onSystemClick, 
         <div className="flex items-center gap-2 px-2 py-1 bg-slate-800/30 rounded-lg">
           <div className="w-2.5 h-2.5 bg-rose-500 rounded-sm"></div>
           <span className="text-[8px] sm:text-[9px] font-black text-slate-500 uppercase tracking-widest">Faulty</span>
+        </div>
+        <div className="flex items-center gap-2 px-2 py-1 bg-slate-800/30 rounded-lg">
+          <div className="w-2.5 h-2.5 bg-blue-600 rounded-sm flex items-center justify-center">
+            <i className="fa-solid fa-wifi text-[5px] text-white"></i>
+          </div>
+          <span className="text-[8px] sm:text-[9px] font-black text-slate-500 uppercase tracking-widest">Net Out</span>
         </div>
         <div className="flex items-center gap-2 px-2 py-1 bg-slate-800/30 rounded-lg">
           <i className="fa-solid fa-circle-check text-blue-400 text-[9px]"></i>

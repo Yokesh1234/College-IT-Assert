@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useMemo } from 'react';
 import { System, SystemStatus, ComponentStatus, Booking, SoftwareInfo, LicenseStatus, MaintenanceLog } from '../types';
 import { SLOTS } from '../constants';
@@ -15,22 +14,16 @@ interface SystemModalProps {
 const SystemModal: React.FC<SystemModalProps> = ({ system, onClose, onBook, onUpdate }) => {
   const [activeTab, setActiveTab] = useState<'info' | 'book' | 'edit' | 'logs'>('info');
   
-  // Booking State
   const [bookingDate, setBookingDate] = useState(new Date().toISOString().split('T')[0]);
   const [bookingSlot, setBookingSlot] = useState(SLOTS[0]);
   const [bookingBatch, setBookingBatch] = useState('');
   const [bookingSession, setBookingSession] = useState('');
   
-  // Log State
   const [newLogNote, setNewLogNote] = useState('');
 
-  // Edit State
   const [editData, setEditData] = useState<System>(JSON.parse(JSON.stringify(system)));
   const [isProcessing, setIsProcessing] = useState(false);
   const [msg, setMsg] = useState<{ type: 'success' | 'error', text: string } | null>(null);
-
-  // Live health preview based on edits
-  const projectedSystem = useMemo(() => calculateSystemHealth(editData), [editData]);
 
   useEffect(() => {
     setEditData(JSON.parse(JSON.stringify(system)));
@@ -99,7 +92,7 @@ const SystemModal: React.FC<SystemModalProps> = ({ system, onClose, onBook, onUp
     }));
   };
 
-  const getStatusBadge = (status: any, key?: string) => {
+  const getStatusBadge = (status: any) => {
     const isOk = status === ComponentStatus.OK || status === ComponentStatus.CONNECTED || status === true;
     const isFaulty = status === ComponentStatus.FAULTY || status === ComponentStatus.NOT_CONNECTED || status === ComponentStatus.MISSING;
     return (
@@ -127,7 +120,6 @@ const SystemModal: React.FC<SystemModalProps> = ({ system, onClose, onBook, onUp
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-2 sm:p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
       <div className="bg-slate-900 border border-slate-700 w-full max-w-5xl max-h-[95vh] sm:max-h-[90vh] overflow-hidden rounded-2xl sm:rounded-3xl shadow-2xl flex flex-col">
         
-        {/* Header */}
         <div className="p-4 sm:p-6 border-b border-slate-800 flex flex-col sm:flex-row gap-4 sm:justify-between sm:items-center bg-slate-900/50">
           <div className="flex items-center gap-4">
             <div>
@@ -174,7 +166,7 @@ const SystemModal: React.FC<SystemModalProps> = ({ system, onClose, onBook, onUp
                         {['keyboard', 'mouse', 'monitor', 'network'].map(k => (
                           <div key={k} className="flex flex-col gap-1 p-2 bg-slate-900/40 rounded-lg">
                             <span className="text-[8px] text-slate-500 uppercase font-black">{k}</span>
-                            {getStatusBadge((system.hardware as any)[k], k)}
+                            {getStatusBadge((system.hardware as any)[k])}
                           </div>
                         ))}
                       </div>
@@ -242,7 +234,7 @@ const SystemModal: React.FC<SystemModalProps> = ({ system, onClose, onBook, onUp
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   <div className="space-y-6">
                     <div className="space-y-1">
-                      <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest block">Workstation Alias (Custom Name)</label>
+                      <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest block">Workstation Alias</label>
                       <input 
                         type="text" 
                         value={editData.name} 
@@ -254,20 +246,32 @@ const SystemModal: React.FC<SystemModalProps> = ({ system, onClose, onBook, onUp
                     
                     <h3 className="text-[9px] font-black text-slate-500 uppercase pt-4">Hardware Config</h3>
                     <div className="grid grid-cols-2 gap-4">
-                       {['keyboard', 'mouse', 'monitor', 'network'].map(part => (
-                         <div key={part} className="space-y-1">
-                            <label className="text-[8px] font-black text-slate-500 uppercase">{part}</label>
-                            <select 
-                              value={(editData.hardware as any)[part]}
-                              onChange={e => setEditData({...editData, hardware: {...editData.hardware, [part]: e.target.value as any}})}
-                              className="w-full bg-slate-800 border border-slate-700 rounded-xl p-3 text-xs text-white outline-none"
-                            >
-                              <option value={ComponentStatus.OK}>OK</option>
-                              <option value={ComponentStatus.FAULTY}>Faulty</option>
-                              <option value={ComponentStatus.MISSING}>Missing</option>
-                            </select>
-                         </div>
-                       ))}
+                       {['keyboard', 'mouse', 'monitor', 'network'].map(part => {
+                         const isNetwork = part === 'network';
+                         return (
+                           <div key={part} className="space-y-1">
+                              <label className="text-[8px] font-black text-slate-500 uppercase">{part}</label>
+                              <select 
+                                value={(editData.hardware as any)[part]}
+                                onChange={e => setEditData({...editData, hardware: {...editData.hardware, [part]: e.target.value as any}})}
+                                className="w-full bg-slate-800 border border-slate-700 rounded-xl p-3 text-xs text-white outline-none"
+                              >
+                                {isNetwork ? (
+                                  <>
+                                    <option value={ComponentStatus.CONNECTED}>Connected</option>
+                                    <option value={ComponentStatus.NOT_CONNECTED}>Not Connected</option>
+                                  </>
+                                ) : (
+                                  <>
+                                    <option value={ComponentStatus.OK}>OK</option>
+                                    <option value={ComponentStatus.FAULTY}>Faulty</option>
+                                    <option value={ComponentStatus.MISSING}>Missing</option>
+                                  </>
+                                )}
+                              </select>
+                           </div>
+                         );
+                       })}
                     </div>
                   </div>
 
@@ -300,7 +304,6 @@ const SystemModal: React.FC<SystemModalProps> = ({ system, onClose, onBook, onUp
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-1">
                       <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest block">Date</label>
-                      {/* Fixed: Wrapped setBookingDate with an arrow function to correctly handle the ChangeEvent and extract e.target.value */}
                       <input type="date" required value={bookingDate} onChange={e => setBookingDate(e.target.value)} className="w-full bg-slate-800 border border-slate-700 rounded-xl p-4 text-xs text-white outline-none" />
                     </div>
                     <div className="space-y-1">

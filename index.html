@@ -1,13 +1,11 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <meta name="google-site-verification" content="6iqzAzjfCfWfsabKBcZFEioDwvPqWN7HvneHdXWbiMo" />
+  <meta name="google-site-verification" content="fobQVbEIvx-BfuR_oQrjkxbBfCub6_OzBfaUL6zhA0k" />
   <title>SysAdmin Lab Control</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="icon" href="favicon.png">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap');
@@ -24,7 +22,6 @@
       -webkit-tap-highlight-color: transparent;
     }
 
-    /* Prevent text resizing on focus in mobile browsers */
     input, select, textarea {
       font-size: 16px !important;
     }
@@ -44,7 +41,6 @@
       background: #334155;
     }
 
-    /* Smooth transitions for responsive layout changes */
     .transition-layout {
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
@@ -60,9 +56,11 @@
 <script type="importmap">
 {
   "imports": {
-    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
-    "react/": "https://esm.sh/react@^19.2.3/",
-    "react": "https://esm.sh/react@^19.2.3"
+    "react": "https://esm.sh/react@19.0.0",
+    "react-dom": "https://esm.sh/react-dom@19.0.0",
+    "react-dom/client": "https://esm.sh/react-dom@19.0.0/client",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
+    "react/": "https://esm.sh/react@^19.2.4/"
   }
 }
 </script>
@@ -70,6 +68,7 @@
 </head>
 <body>
   <div id="root"></div>
+  <script type="module" src="index.tsx"></script>
 <script type="module" src="/index.tsx"></script>
 </body>
 </html>

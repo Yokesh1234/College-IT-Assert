@@ -42,7 +42,6 @@ const App: React.FC = () => {
     setLoading(true);
     setSyncError(null);
 
-    // Safety timeout: stop loading after 10 seconds regardless of cloud status
     const safetyTimeout = setTimeout(() => {
       setLoading(false);
       if (systems.length === 0) {
@@ -104,6 +103,22 @@ const App: React.FC = () => {
       );
     } else {
       setSelectedSystem(system);
+    }
+  };
+
+  const handleSelectTable = (pcIds: string[]) => {
+    if (!selectionMode) return;
+    
+    const allPresent = pcIds.every(id => selectedPcIds.includes(id));
+    if (allPresent) {
+      // Deselect all PCs in this table
+      setSelectedPcIds(prev => prev.filter(id => !pcIds.includes(id)));
+    } else {
+      // Add all PCs in this table that aren't already selected
+      setSelectedPcIds(prev => {
+        const newOnes = pcIds.filter(id => !prev.includes(id));
+        return [...prev, ...newOnes];
+      });
     }
   };
 
@@ -282,7 +297,7 @@ const App: React.FC = () => {
                   <h2 className="text-2xl sm:text-4xl font-black text-white tracking-tighter">Laboratory Floor Plan</h2>
                   <p className="text-slate-500 text-[11px] sm:text-sm mt-1 sm:mt-2 max-w-lg leading-relaxed">
                     {selectionMode 
-                      ? 'SELECTING WORKSTATIONS FOR BATCH BOOKING.' 
+                      ? 'SELECTING WORKSTATIONS (SINGLE PC OR SELECT TABLE).' 
                       : 'REAL-TIME MONITORING ACTIVE.'}
                   </p>
                 </div>
@@ -294,6 +309,8 @@ const App: React.FC = () => {
                   gridConfig={gridConfig}
                   selectedPcIds={selectedPcIds}
                   onSystemClick={handleSystemInteraction} 
+                  onTableSelect={handleSelectTable}
+                  selectionMode={selectionMode}
                 />
               </div>
             </div>
