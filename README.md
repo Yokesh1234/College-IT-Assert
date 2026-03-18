@@ -6,11 +6,11 @@
 
 This contains everything you need to run your app locally.
 
-## Configuration
+## Configuration **Google Firebase Console**
 
-1. Open Google firebase console:
-2. sigin
-3. Create project
+1. Sigin
+2. Create project
+3. 
 4. 
 
 ## Run Locally
