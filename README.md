@@ -6,6 +6,13 @@
 
 This contains everything you need to run your app locally.
 
+## Configuration
+
+1. Open Google firebase console:
+2. sigin
+3. Create project
+4. 
+
 ## Run Locally
 
 **Prerequisites:**  Node.js
