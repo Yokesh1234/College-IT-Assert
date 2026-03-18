@@ -12,7 +12,7 @@ This contains everything you need to run your app locally.
 
 
 1. Install dependencies:
-   **Download node module:** `npm install`
+   `npm install`
 
 2. Run the app:
-   **Run Project:** `npm run dev`
+   `npm run dev`
