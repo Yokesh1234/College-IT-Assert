@@ -5,13 +5,13 @@ import { getDatabase } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-
 
 // Double check these values in your Firebase Console -> Project Settings
 const firebaseConfig = {
-  apiKey: "AIzaSyD5u_H4wz2HoJt6NbL0jbVC1y0iZtJROqQ",
-  authDomain: "college-it-assert.firebaseapp.com",
-  databaseURL: "https://college-it-assert-default-rtdb.firebaseio.com",
-  projectId: "college-it-assert",
-  storageBucket: "college-it-assert.firebasestorage.app",
-  messagingSenderId: "204155417502",
-  appId: "1:204155417502:web:f23aa8b2ed6c88a5d79c8f"
+  apiKey: "AIzaSyCVFJKs8ZHBOGoox-hQRSYJ_oV6m-nQ_N0",
+  authDomain: "it-assert.firebaseapp.com",
+  databaseURL: "https://it-assert-default-rtdb.firebaseio.com",
+  projectId: "it-assert",
+  storageBucket: "it-assert.firebasestorage.app",
+  messagingSenderId: "672715871184",
+  appId: "1:672715871184:web:5463340e34f914930e9fd5"
 };
 
 // Singleton pattern for Firebase initialization
