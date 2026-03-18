@@ -13,7 +13,7 @@ const firebaseConfig = {
   messagingSenderId: "672715871184",
   appId: "1:672715871184:web:5463340e34f914930e9fd5"
 };
-
+const app = initializeApp(firebaseConfig);
 // Singleton pattern for Firebase initialization
 const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 export const auth = getAuth(app);
