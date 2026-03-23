@@ -1,9 +1,9 @@
 
-import { initializeApp, getApp, getApps } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js';
-import { getAuth } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js';
-import { getDatabase } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js';
+import { initializeApp } from 'firebase/app';
+import { getAuth } from 'firebase/auth';
+import { getDatabase } from 'firebase/database';
 
-// Double check these values in your Firebase Console -> Project Settings
+// Placeholder config - in a real app, this would be in firebase-applet-config.json
 const firebaseConfig = {
   apiKey: "AIzaSyCVFJKs8ZHBOGoox-hQRSYJ_oV6m-nQ_N0",
   authDomain: "it-assert.firebaseapp.com",
@@ -13,8 +13,7 @@ const firebaseConfig = {
   messagingSenderId: "672715871184",
   appId: "1:672715871184:web:5463340e34f914930e9fd5"
 };
+
 const app = initializeApp(firebaseConfig);
-// Singleton pattern for Firebase initialization
-const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 export const auth = getAuth(app);
 export const db = getDatabase(app);

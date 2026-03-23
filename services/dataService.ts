@@ -1,5 +1,5 @@
 
-import { ref, onValue, set, update, push } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js';
+import { ref, onValue, set, update, push } from 'firebase/database';
 import { db } from './firebase';
 import { System, SystemStatus, ComponentStatus, LicenseStatus, Booking, GridConfig, MaintenanceLog } from '../types';
 import { REQUIRED_SOFTWARE, TOTAL_LABS, SYSTEMS_PER_LAB } from '../constants';
