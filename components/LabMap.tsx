@@ -34,7 +34,13 @@ const LabMap: React.FC<LabMapProps> = ({
   const handleStartEditTable = (index: number, currentName: string) => {
     if (selectionMode) return; // Disable editing table name during selection mode
     setEditingTableIndex(index);
-    setTempTableName(currentName || `Table ${(index + 1).toString().padStart(2, '0')}`);
+    
+    const colIndex = index % gridConfig.cols;
+    const rowIndex = Math.floor(index / gridConfig.cols) + 1;
+    const colLetter = String.fromCharCode(65 + colIndex);
+    const defaultName = `TB-${colLetter}${rowIndex}`;
+    
+    setTempTableName(currentName || defaultName);
   };
 
   const handleSaveTableName = async (index: number) => {
@@ -69,7 +75,10 @@ const LabMap: React.FC<LabMapProps> = ({
     if (tableSystems.length === 0) return null;
 
     const customName = gridConfig.tableNames?.[labIndex];
-    const defaultName = `Table ${(labIndex + 1).toString().padStart(2, '0')}`;
+    const colIndex = labIndex % gridConfig.cols;
+    const rowIndex = Math.floor(labIndex / gridConfig.cols) + 1;
+    const colLetter = String.fromCharCode(65 + colIndex);
+    const defaultName = `TB-${colLetter}${rowIndex}`;
     const displayName = customName || defaultName;
 
     const allInTableSelected = tablePcIds.length > 0 && tablePcIds.every(id => selectedPcIds.includes(id));
