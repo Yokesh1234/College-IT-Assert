@@ -22,6 +22,7 @@ const App: React.FC = () => {
   const [selectionMode, setSelectionMode] = useState(false);
   const [selectedPcIds, setSelectedPcIds] = useState<string[]>([]);
   const [isBulkBookingOpen, setIsBulkBookingOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -293,13 +294,34 @@ const App: React.FC = () => {
 
             <div className="flex-grow">
               <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-6 sm:mb-10">
-                <div>
+                <div className="flex-1">
                   <h2 className="text-2xl sm:text-4xl font-black text-white tracking-tighter">Laboratory Floor Plan</h2>
                   <p className="text-slate-500 text-[11px] sm:text-sm mt-1 sm:mt-2 max-w-lg leading-relaxed">
                     {selectionMode 
                       ? 'SELECTING WORKSTATIONS (SINGLE PC OR SELECT TABLE).' 
                       : 'REAL-TIME MONITORING ACTIVE.'}
                   </p>
+                </div>
+                
+                <div className="w-full sm:w-72 relative group">
+                  <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none">
+                    <i className="fa-solid fa-magnifying-glass text-slate-500 group-focus-within:text-blue-500 transition-colors text-xs"></i>
+                  </div>
+                  <input 
+                    type="text"
+                    placeholder="SEARCH PC NAME..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="w-full bg-slate-900/50 border border-slate-800 rounded-2xl py-3 pl-11 pr-4 text-[10px] font-black text-white placeholder:text-slate-600 focus:border-blue-500/50 focus:bg-slate-900 outline-none transition-all tracking-widest uppercase"
+                  />
+                  {searchQuery && (
+                    <button 
+                      onClick={() => setSearchQuery('')}
+                      className="absolute inset-y-0 right-4 flex items-center text-slate-600 hover:text-white transition-colors"
+                    >
+                      <i className="fa-solid fa-circle-xmark text-xs"></i>
+                    </button>
+                  )}
                 </div>
               </div>
 
@@ -311,6 +333,7 @@ const App: React.FC = () => {
                   onSystemClick={handleSystemInteraction} 
                   onTableSelect={handleSelectTable}
                   selectionMode={selectionMode}
+                  searchQuery={searchQuery}
                 />
               </div>
             </div>

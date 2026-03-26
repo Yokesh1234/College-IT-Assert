@@ -4,10 +4,11 @@ import { System, SystemStatus, ComponentStatus } from '../types';
 interface SystemSeatProps {
   system: System;
   isSelected?: boolean;
+  isHighlighted?: boolean;
   onClick: (system: System) => void;
 }
 
-const SystemSeat: React.FC<SystemSeatProps> = ({ system, isSelected, onClick }) => {
+const SystemSeat: React.FC<SystemSeatProps> = ({ system, isSelected, isHighlighted, onClick }) => {
   const isNetworkDown = system.hardware.network === ComponentStatus.NOT_CONNECTED;
 
   const getStatusColor = () => {
@@ -43,15 +44,16 @@ const SystemSeat: React.FC<SystemSeatProps> = ({ system, isSelected, onClick }) 
         relative w-full h-full rounded-md cursor-pointer transition-all duration-200 
         flex items-center justify-center border group active:scale-90
         ${isSelected ? 'border-white ring-2 ring-blue-500/50 scale-110 z-10' : 'border-white/5'}
+        ${isHighlighted ? 'ring-4 ring-white/50 border-white scale-110 z-20 animate-pulse shadow-[0_0_15px_rgba(255,255,255,0.5)]' : ''}
         ${getStatusColor()}
         shadow-md
       `}
     >
       <div className="flex flex-col items-center">
-        <span className={`text-[8px] sm:text-[9px] font-black uppercase tracking-tighter transition-opacity ${isSelected ? 'hidden' : 'opacity-80'}`}>
+        <span className={`text-[8px] sm:text-[9px] font-black uppercase tracking-tighter transition-opacity ${(isSelected || isHighlighted) ? 'hidden' : 'opacity-80'}`}>
           {seatLabel}
         </span>
-        {getStatusIcon()}
+        {(isSelected || isHighlighted) ? <i className="fa-solid fa-magnifying-glass text-[10px] sm:text-[12px] text-white"></i> : getStatusIcon()}
       </div>
 
       {system.bookings.length > 0 && !isSelected && (

@@ -12,6 +12,7 @@ interface LabMapProps {
   onTableSelect?: (pcIds: string[]) => void;
   gridConfig: GridConfig;
   selectionMode?: boolean;
+  searchQuery?: string;
 }
 
 const LabMap: React.FC<LabMapProps> = ({ 
@@ -20,7 +21,8 @@ const LabMap: React.FC<LabMapProps> = ({
   onSystemClick, 
   onTableSelect,
   gridConfig, 
-  selectionMode 
+  selectionMode,
+  searchQuery
 }) => {
   const [editingTableIndex, setEditingTableIndex] = useState<number | null>(null);
   const [tempTableName, setTempTableName] = useState('');
@@ -66,6 +68,7 @@ const LabMap: React.FC<LabMapProps> = ({
               system={system}
               isSelected={selectedPcIds.includes(system.id)}
               onClick={onSystemClick}
+              isHighlighted={searchQuery ? (system.name || system.id).toLowerCase().includes(searchQuery.toLowerCase()) : false}
             />
           </div>
         );
