@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="google-site-verification" content="fobQVbEIvx-BfuR_oQrjkxbBfCub6_OzBfaUL6zhA0k" />
+  <title>SysAdmin Lab Control</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap');
+    
+    :root {
+      scrollbar-gutter: stable;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #020617;
+      color: #f8fafc;
+      overflow-x: hidden;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    input, select, textarea {
+      font-size: 16px !important;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 4px;
+      height: 4px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #1e293b;
+      border-radius: 10px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #334155;
+    }
+
+    .transition-layout {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+<script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@19.0.0",
+    "react-dom": "https://esm.sh/react-dom@19.0.0",
+    "react-dom/client": "https://esm.sh/react-dom@19.0.0/client",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
+    "react/": "https://esm.sh/react@^19.2.4/"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+<body>
+  <div id="root"></div>
+  <script type="module" src="index.tsx"></script>
+<script type="module" src="/index.tsx"></script>
+</body>
+</html>
