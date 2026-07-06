@@ -79,6 +79,21 @@ export const INITIAL_TIMETABLES: TimetableEntry[] = [
     room: "ST.PAUL'S BLOCK-GROUND FLOOR"
   },
   {
+    id: 'T-MON-1A',
+    day: 'MONDAY',
+    period: 2,
+    startTime: '09:00 AM',
+    endTime: '10:00 AM',
+    year: 'II',
+    department: 'CSE',
+    subject: 'Programming in Java',
+    subjectCode: 'S12BLH31',
+    laboratory: 'Computer Society and Security Lab',
+    batch: 'C4',
+    faculty: 'Dr. M. D. Anto Praveena / Dr. B. Ankayarkanni',
+    room: "ST.PAUL'S BLOCK-GROUND FLOOR"
+  },
+  {
     id: 'T-MON-1B',
     day: 'MONDAY',
     period: 1,
