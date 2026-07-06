@@ -412,6 +412,36 @@ export const INITIAL_TIMETABLES: TimetableEntry[] = [
     faculty: 'Dr.N.S.Usha / Dr.D.Sudha',
     room: "ST.PAUL'S BLOCK-GROUND FLOOR"
   },
+    {
+    id: 'T-WED-5A',
+    day: 'WEDNESDAY',
+    period: 6,
+    startTime: '02:15 PM',
+    endTime: '03:15 PM',
+    year: 'III',
+    department: 'CSE',
+    subject: 'Computer Networks lab',
+    subjectCode: 'SCSB2501',
+    laboratory: 'Computer Society and Security Lab',
+    batch: 'A3',
+    faculty: 'Dr. V. Ulagamuthalvi / Dr.S. Prayla Shyry',
+    room: "ST.PAUL'S BLOCK-GROUND FLOOR"
+  },
+  {
+    id: 'T-WED-5B',
+    day: 'WEDNESDAY',
+    period: 6,
+    startTime: '02:15 PM',
+    endTime: '03:15 PM',
+    year: 'III',
+    department: 'CSE',
+    subject: 'Computer Networks lab',
+    subjectCode: 'SCSB2501',
+    laboratory: 'Computer Society and Security Lab',
+    batch: 'B3',
+    faculty: 'Dr.N.S.Usha / Dr.D.Sudha',
+    room: "ST.PAUL'S BLOCK-GROUND FLOOR"
+  },
 
   // --- THURSDAY ---
   {
@@ -504,6 +534,36 @@ export const INITIAL_TIMETABLES: TimetableEntry[] = [
     faculty: 'Dr.G.M.Karpura Dheepan / Dr. L. K. Joshila Grace',
     room: "ST.PAUL'S BLOCK-GROUND FLOOR"
   },
+    {
+    id: 'T-THU-5A',
+    day: 'THURSDAY',
+    period: 6,
+    startTime: '02:15 PM',
+    endTime: '03:15 PM',
+    year: 'III',
+    department: 'CSE',
+    subject: 'Computer Networks lab',
+    subjectCode: 'SCSB2501',
+    laboratory: 'Computer Society and Security Lab',
+    batch: 'A4',
+    faculty: 'Dr. Deepa.V / Ms.K.Madhushri',
+    room: "ST.PAUL'S BLOCK-GROUND FLOOR"
+  },
+  {
+    id: 'T-THU-5B',
+    day: 'THURSDAY',
+    period: 6,
+    startTime: '02:15 PM',
+    endTime: '03:15 PM',
+    year: 'III',
+    department: 'CSE',
+    subject: 'Computer Networks lab',
+    subjectCode: 'SCSB2501',
+    laboratory: 'Computer Society and Security Lab',
+    batch: 'B4',
+    faculty: 'Dr.G.M.Karpura Dheepan / Dr. L. K. Joshila Grace',
+    room: "ST.PAUL'S BLOCK-GROUND FLOOR"
+  },
 
   // --- FRIDAY ---
   {
@@ -587,6 +647,36 @@ export const INITIAL_TIMETABLES: TimetableEntry[] = [
     period: 5,
     startTime: '01:15 PM',
     endTime: '02:15 PM',
+    year: 'III',
+    department: 'CSE',
+    subject: 'Computer Networks lab',
+    subjectCode: 'SCSB2501',
+    laboratory: 'Computer Society and Security Lab',
+    batch: 'B5',
+    faculty: 'Dr.V.Surya / Ms.K.Madhushri',
+    room: "ST.PAUL'S BLOCK-GROUND FLOOR"
+  },
+    {
+    id: 'T-FRI-5A',
+    day: 'FRIDAY',
+    period: 6,
+    startTime: '02:15 PM',
+    endTime: '03:15 PM',
+    year: 'III',
+    department: 'CSE',
+    subject: 'Computer Networks lab',
+    subjectCode: 'SCSB2501',
+    laboratory: 'Computer Society and Security Lab',
+    batch: 'A5',
+    faculty: 'Dr.P.M.Lavanya / Dr.P.Ranjana',
+    room: "ST.PAUL'S BLOCK-GROUND FLOOR"
+  },
+  {
+    id: 'T-FRI-5B',
+    day: 'FRIDAY',
+    period: 6,
+    startTime: '02:15 PM',
+    endTime: '03:15 PM',
     year: 'III',
     department: 'CSE',
     subject: 'Computer Networks lab',
