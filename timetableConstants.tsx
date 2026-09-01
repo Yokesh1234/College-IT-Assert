@@ -158,8 +158,7 @@ export const INITIAL_TIMETABLES: TimetableEntry[] = [
     batch: 'E3',
     faculty: 'Dr.A.Mohana Priya / Ms.Kalaivani A',
     room: "ST.PAUL'S BLOCK-GROUND FLOOR"
-  },
-  {
+  },  {
     id: 'T-MON-1D',
     day: 'MONDAY',
     period: 4,
@@ -172,6 +171,21 @@ export const INITIAL_TIMETABLES: TimetableEntry[] = [
     laboratory: 'Computer Society and Security Lab',
     batch: 'E2',
     faculty: 'Dr.K.Lalithadev / Dr.D.Sudha',
+    room: "ST.PAUL'S BLOCK-GROUND FLOOR"
+  },
+  {
+    id: 'T-MON-2D',
+    day: 'MONDAY',
+    period: 4,
+    startTime: '12:15 AM',
+    endTime: '01:15 PM',
+    year: 'I',
+    department: 'CSE',
+    subject: 'Programming C',
+    subjectCode: 'S11BLH11',
+    laboratory: 'Computer Society and Security Lab',
+    batch: 'E3',
+    faculty: 'Dr.A.Mohana Priya / Ms.Kalaivani A',
     room: "ST.PAUL'S BLOCK-GROUND FLOOR"
   },
   {
