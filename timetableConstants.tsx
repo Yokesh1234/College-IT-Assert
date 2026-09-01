@@ -186,6 +186,21 @@ export const INITIAL_TIMETABLES: TimetableEntry[] = [
 
   // --- TUESDAY ---
   {
+    id: 'T-TUE-1A',
+    day: 'TUESDAY',
+    period: 1,
+    startTime: '09:00 AM',
+    endTime: '10:00 AM',
+    year: 'III',
+    department: 'CSE',
+    subject: 'CBCS',
+    subjectCode: 'SCSB4001',
+    laboratory: 'Computer Society and Security Lab',
+    batch: 'C2',
+    faculty: 'Dr. A.Mohana Priya',
+    room: "ST.PAUL'S BLOCK-GROUND FLOOR"
+  },
+  {
     id: 'T-TUE-2A',
     day: 'TUESDAY',
     period: 2,
@@ -276,7 +291,7 @@ export const INITIAL_TIMETABLES: TimetableEntry[] = [
     room: "ST.PAUL'S BLOCK-GROUND FLOOR"
   },
   {
-    id: 'T-TUE-5A',
+    id: 'T-TUE-6A',
     day: 'TUESDAY',
     period: 6,
     startTime: '02:15 PM',
@@ -291,7 +306,7 @@ export const INITIAL_TIMETABLES: TimetableEntry[] = [
     room: "ST.PAUL'S BLOCK-GROUND FLOOR"
   },
   {
-    id: 'T-TUE-5B',
+    id: 'T-TUE-6B',
     day: 'TUESDAY',
     period: 6,
     startTime: '02:15 PM',
