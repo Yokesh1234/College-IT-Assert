@@ -10,7 +10,7 @@ export const INITIAL_TIME_SLOTS: TimeSlot[] = [
 ];
 
 export const INITIAL_SUBJECTS: Subject[] = [
-  { subjectCode: 'S12BLH71', subjectName: 'Big Data Analytics', department: 'CSE', year: 'IV' },
+  { subjectCode: 'S11BLH11', subjectName: 'Programming in C', department: 'CSE', year: 'I' },
   { subjectCode: 'S11BPB51', subjectName: 'Augmented and Virtual Reality', department: 'CSE', year: 'III' },
   { subjectCode: 'SCSB2501', subjectName: 'Computer Networks lab', department: 'CSE', year: 'III' },
   { subjectCode: 'S11BLH51', subjectName: 'Software Engineering Design and Development', department: 'CSE', year: 'III' },
@@ -58,7 +58,12 @@ export const INITIAL_FACULTY: Faculty[] = [
   { facultyId: 'F38', name: 'Ms.Sandhiya.B', designation: 'Assistant Professor', department: 'CSE' },
   { facultyId: 'F39', name: 'Ms.P.Kathambari', designation: 'Assistant Professor', department: 'CSE' },
   { facultyId: 'F40', name: 'Dr.D.Saravanan', designation: 'Associate Professor', department: 'CSE' },
-  { facultyId: 'F41', name: 'Dr. A. Sindhuja', designation: 'Associate Professor', department: 'CSE' }
+  { facultyId: 'F41', name: 'Dr. A. Sindhuja', designation: 'Associate Professor', department: 'CSE' },
+  { facultyId: 'F42', name: 'Dr.P.Rajaseka', designation: 'Associate Professor', department: 'CSE' },
+  { facultyId: 'F43', name: 'Dr.K.Lalithadevi', designation: 'Associate Professor', department: 'CSE' },
+  { facultyId: 'F44', name: 'Ms.Kalaivani A', designation: 'Associate Professor', department: 'CSE' },
+  { facultyId: 'F45', name: 'Dr.D.Sudha', designation: 'Associate Professor', department: 'CSE' },
+  { facultyId: 'F46', name: 'Dr.A.Mohana Priya ', designation: 'Associate Professor', department: 'CSE' }
 ];
 
 export const INITIAL_TIMETABLES: TimetableEntry[] = [
@@ -69,21 +74,6 @@ export const INITIAL_TIMETABLES: TimetableEntry[] = [
     period: 1,
     startTime: '09:00 AM',
     endTime: '10:00 AM',
-    year: 'II',
-    department: 'CSE',
-    subject: 'Programming in Java',
-    subjectCode: 'S12BLH31',
-    laboratory: 'Computer Society and Security Lab',
-    batch: 'C4',
-    faculty: 'Dr. M. D. Anto Praveena / Dr. B. Ankayarkanni',
-    room: "ST.PAUL'S BLOCK-GROUND FLOOR"
-  },
-  {
-    id: 'T-MON-1A',
-    day: 'MONDAY',
-    period: 2,
-    startTime: '10:00 AM',
-    endTime: '11:00 AM',
     year: 'II',
     department: 'CSE',
     subject: 'Programming in Java',
@@ -109,7 +99,80 @@ export const INITIAL_TIMETABLES: TimetableEntry[] = [
     room: "ST.PAUL'S BLOCK-GROUND FLOOR"
   },
   {
-    id: 'T-MON-1B',
+    id: 'T-MON-2A',
+    day: 'MONDAY',
+    period: 2,
+    startTime: '10:00 AM',
+    endTime: '11:00 AM',
+    year: 'II',
+    department: 'CSE',
+    subject: 'Programming in Java',
+    subjectCode: 'S12BLH31',
+    laboratory: 'Computer Society and Security Lab',
+    batch: 'C4',
+    faculty: 'Dr. M. D. Anto Praveena / Dr. B. Ankayarkanni',
+    room: "ST.PAUL'S BLOCK-GROUND FLOOR"
+  },
+  
+  {
+    id: 'T-MON-2B',
+    day: 'MONDAY',
+    period: 2,
+    startTime: '10:00 AM',
+    endTime: '11:00 AM',
+    year: 'II',
+    department: 'CSE',
+    subject: 'Programming in Java',
+    subjectCode: 'S12BLH31',
+    laboratory: 'Computer Society and Security Lab',
+    batch: 'D1',
+    faculty: 'Dr.D.Saravanan / Dr. A. Sindhuja',
+    room: "ST.PAUL'S BLOCK-GROUND FLOOR"
+  },
+  {
+    id: 'T-MON-1C',
+    day: 'MONDAY',
+    period: 3,
+    startTime: '11:15 AM',
+    endTime: '12:15 AM',
+    year: 'I',
+    department: 'CSE',
+    subject: 'Programming C',
+    subjectCode: 'S11BLH11',
+    laboratory: 'Computer Society and Security Lab',
+    batch: 'E2',
+    faculty: 'Dr.D.Saravanan / Dr. A. Sindhuja',
+    room: "ST.PAUL'S BLOCK-GROUND FLOOR"
+  },{
+    id: 'T-MON-2C',
+    day: 'MONDAY',
+    period: 2,
+    startTime: '10:00 AM',
+    endTime: '11:00 AM',
+    year: 'II',
+    department: 'CSE',
+    subject: 'Programming in Java',
+    subjectCode: 'S12BLH31',
+    laboratory: 'Computer Society and Security Lab',
+    batch: 'D1',
+    faculty: 'Dr.D.Saravanan / Dr. A. Sindhuja',
+    room: "ST.PAUL'S BLOCK-GROUND FLOOR"
+  },{
+    id: 'T-MON-2B',
+    day: 'MONDAY',
+    period: 2,
+    startTime: '10:00 AM',
+    endTime: '11:00 AM',
+    year: 'II',
+    department: 'CSE',
+    subject: 'Programming in Java',
+    subjectCode: 'S12BLH31',
+    laboratory: 'Computer Society and Security Lab',
+    batch: 'D1',
+    faculty: 'Dr.D.Saravanan / Dr. A. Sindhuja',
+    room: "ST.PAUL'S BLOCK-GROUND FLOOR"
+  },{
+    id: 'T-MON-2B',
     day: 'MONDAY',
     period: 2,
     startTime: '10:00 AM',
